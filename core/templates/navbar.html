@@ -1,0 +1,26 @@
+<!-- components/navbar.html -->
+<nav class="bg-white shadow-lg">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex justify-between">
+        <div class="flex space-x-7">
+          <div>
+            <!-- Logo de la empresa -->
+            <a href="#" class="flex items-center py-4 px-2">
+              <img src={{company.logo_small.url}} alt="Logo" class="h-8 w-8 mr-2">
+            </a>
+          </div>
+          <!-- Enlaces de navegación primaria -->
+          <div class="hidden md:flex items-center space-x-1">
+            <a href="#" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Inicio</a>
+            <a href="#" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Nosotros</a>
+            <a href="#" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Catálogo</a>
+            <a href="#" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Contacto</a>
+          </div>
+        </div>
+        <!-- Botón de Agendar Cita -->
+        {% comment %} <div class="hidden md:flex items-center space-x-3 ">
+          <a href="#" class="py-2 px-2 font-medium text-white bg-green-500 rounded hover:bg-green-400 transition duration-300">Agendar Cita</a>
+        </div> {% endcomment %}
+      </div>
+    </div>
+  </nav>

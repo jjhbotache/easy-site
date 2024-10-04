@@ -14,6 +14,7 @@ class User(AbstractUser):
 
 class Company(models.Model):
     name = models.CharField(max_length=255)
+    company_description = models.TextField(blank=True, null=True)
     logo_small = models.ImageField(upload_to='logos/small/', validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'svg'])])
     logo_large = models.ImageField(upload_to='logos/large/', validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'svg'])])
     location = models.CharField(max_length=255)

@@ -1,0 +1,22 @@
+{% load static %}
+
+<html lang="es" class="scroll-smooth ">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+
+    <title>{% block title %}Landing{% endblock %}</title>
+    {% block icon %}{% endblock %}
+</head>
+<body class="min-h-screen flex flex-col bg-gray-50">
+    <!-- Navbar -->
+     {% include 'navbar.html' with company=company %}
+
+    {% block content %}{% endblock %}
+
+    <!-- Footer -->
+    {% include 'footer.html' with company=company %}
+</body>
+</html>

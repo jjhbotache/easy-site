@@ -18,18 +18,14 @@ from django.contrib import admin
 from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
-import core
-import core.ulrs
+
+from .logic.helpers.str_helpers import txt_to_url
+from .models import Company
+from .views import home
 # for each company, we will have a landing page
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include(core.ulrs), name='home')
-] \
-+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
-+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    *[path(f'{txt_to_url(company.name)}/',home) for company in Company.objects.all() ]
+]
 
-# if settings.DEBUG:
-#     urlpatterns += 
-#     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

@@ -1,0 +1,44 @@
+<!-- components/footer.html -->
+<footer class="bg-gray-800 text-white">
+    <div class="max-w-6xl mx-auto px-4 py-10">
+      <div class="flex flex-wrap justify-between">
+        <div class="w-full md:w-1/4 text-center md:text-left">
+          <h5 class="uppercase mb-6 font-bold">{{company.name}}</h5>
+          <ul class="mb-4">
+            <li class="mt-2">
+              <a href="#" class="hover:underline">Contacto</a>
+            </li>
+          </ul>
+        </div>
+        <div class="w-full md:w-1/4 text-center md:text-left">
+          <h5 class="uppercase mb-6 font-bold">Contacto</h5>
+          <ul class="mb-4">
+            <li class="mt-2">
+              <span>Dirección: {{company.location}}</span>
+            </li>
+            <li class="mt-2">
+              <span>Teléfono: {{company.whatsapp_number}}</span>
+            </li>
+            <li class="mt-2">
+              <span>Email: {{ company.email }}</span>
+            </li>
+          </ul>
+        </div>
+        <div class="w-full md:w-1/4 text-center md:text-left">
+          <h5 class="uppercase mb-6 font-bold">Redes Sociales</h5>
+          <ul class="mb-4">
+            {% if company.facebook %}
+            <li class="mt-2">
+              <a href="{{ company.facebook }}" class="hover:underline">Facebook</a>
+            </li>
+            {% endif %}
+            {% if company.instagram %}
+            <li class="mt-2">
+              <a href="{{ company.instagram }}" class="hover:underline">Instagram</a>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
