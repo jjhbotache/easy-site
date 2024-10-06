@@ -1,6 +1,6 @@
 {% load static %}
 
-<html lang="es" class="scroll-smooth ">
+<html lang="es" class="scroll-smooth dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,8 +9,26 @@
 
     <title>{% block title %}Landing{% endblock %}</title>
     {% block icon %}{% endblock %}
+
+
+    <style>
+        :root {
+            --bg: #{{colors.background_color}};
+            --text: #{{colors.text_color}};
+            --primary: #{{colors.primary_color.color}};
+            --secondary: #{{colors.secondary_color.color}};
+
+            --primary-light: #{{colors.primary_color.lighter}};
+            --primary-dark: #{{colors.primary_color.darker}};
+
+            --secondary-light: #{{colors.secondary_color.lighter}};
+            --secondary-dark: #{{colors.secondary_color.darker}};
+        }
+
+
+    </style>
 </head>
-<body class="min-h-screen flex flex-col bg-gray-50">
+<body class="min-h-screen flex flex-col">
     <!-- Navbar -->
      {% include 'navbar.html' with company=company %}
 

@@ -3,3 +3,43 @@
     height: 100%;
     object-fit: fill;
 }
+
+
+body{
+    background: var(--bg) !important;
+    color: var(--text) !important;
+}
+
+.primary-bg{background: var(--primary) !important;}
+.secondary-bg{background: var(--secondary) !important;}
+.text-color-bg{background: var(--text) !important;}
+.bg-bg{background: var(--bg) !important;}
+
+.primary-color{color: var(--primary) !important;}
+.secondary-color{color: var(--secondary) !important;}
+.text-color{color: var(--text) !important;}
+.bg-color{color: var(--bg) !important;}
+
+/* Nuevas clases para los colores adicionales */
+.primary-light-bg{background: var(--primary-light) !important;}
+.primary-dark-bg{background: var(--primary-dark) !important;}
+.secondary-light-bg{background: var(--secondary-light) !important;}
+.secondary-dark-bg{background: var(--secondary-dark) !important;}
+
+.primary-light-color{color: var(--primary-light) !important;}
+.primary-dark-color{color: var(--primary-dark) !important;}
+.secondary-light-color{color: var(--secondary-light) !important;}
+.secondary-dark-color{color: var(--secondary-dark) !important;}
+
+
+/* navbar */
+.navbar{
+}
+
+.navbar__link{
+    color: var(--text) !important;
+}
+.navbar__link:hover{
+    color: var(--primary) !important;
+    transform: scale(1.1);
+}

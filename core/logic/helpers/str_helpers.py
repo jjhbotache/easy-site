@@ -46,3 +46,67 @@ def get_company_name_from_url(url):
     
     
     return ''
+
+def adjust_color_value(value, percentage):
+    """
+    Ajusta el valor de un componente RGB (R, G, o B) en base a un porcentaje.
+    Si el porcentaje es positivo, aclara el color. Si es negativo, lo oscurece.
+    """
+    return max(0, min(255, int(value * (1 + percentage))))
+
+
+# ------------------------------------------------------------------------------------------
+def hex_to_rgb(hex_color):
+    """
+    Convierte un color en formato hexadecimal a su representación RGB.
+    """
+    hex_color = hex_color.lstrip('#')
+    return tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
+
+def rgb_to_hex(rgb_color):
+    """
+    Convierte un color en formato RGB a su representación hexadecimal.
+    """
+    return '#{:02x}{:02x}{:02x}'.format(*rgb_color)
+
+def get_color_variations(hex_color, adjustment_percentage=0.3):
+    """
+    Dado un color en formato hexadecimal, devuelve un diccionario con el color original,
+    una versión más clara y una versión más oscura. 
+    El ajuste se hace en base a un porcentaje dado (por defecto 20%).
+    
+    Parámetros:
+    - hex_color: (str) Color en formato hexadecimal (#rrggbb).
+    - adjustment_percentage: (float) Porcentaje de ajuste para aclarar/oscurecer (e.g., 0.2 es un 20%).
+    
+    Retorna:
+    - dict con 'color', 'lighter' y 'darker' en formato hexadecimal.
+    """
+    # Convertir el color hexadecimal a RGB
+    r, g, b = hex_to_rgb(hex_color)
+    
+    # Calcular el color más claro (incrementa cada componente RGB)
+    lighter_rgb = (
+        adjust_color_value(r, adjustment_percentage),
+        adjust_color_value(g, adjustment_percentage),
+        adjust_color_value(b, adjustment_percentage)
+    )
+    
+    # Calcular el color más oscuro (reduce cada componente RGB)
+    darker_rgb = (
+        adjust_color_value(r, -adjustment_percentage),
+        adjust_color_value(g, -adjustment_percentage),
+        adjust_color_value(b, -adjustment_percentage)
+    )
+    
+    # Convertir los colores RGB de nuevo a hexadecimal
+    output_colors = {
+        'color': hex_color,
+        'lighter': rgb_to_hex(lighter_rgb)[1:],
+        'darker': rgb_to_hex(darker_rgb)[1:]
+    }
+
+    print(output_colors)
+    return output_colors
+
+# ------------------------------------------------------------------------------------------
