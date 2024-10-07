@@ -1,0 +1,62 @@
+<div class="container mx-auto px-4">
+    <form id="contactForm" class="max-w-lg mx-auto" method="post" action="contact-through-mail">
+      {% csrf_token %}
+      <div class="mb-4">
+          <label for="nombre" class="block font-bold mb-2 primary-color">Nombre</label>
+          <input type="text" id="nombre" name="nombre" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 secondary-light-bg">
+      </div>
+      <div class="mb-4">
+          <label for="email" class="block font-bold mb-2 primary-color">Email</label>
+          <input type="email" id="email" name="email" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 secondary-light-bg">
+      </div>
+      <div class="mb-4">
+          <label for="mensaje" class="block font-bold mb-2 primary-color">Mensaje</label>
+          <textarea id="mensaje" name="mensaje" rows="4" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 secondary-light-bg"></textarea>
+      </div>
+      <button type="submit" class="w-full text-white font-bold py-2 px-4 rounded transition duration-300 secondary-bg primary-color">
+          Enviar Mensaje
+      </button>
+  </form>
+</div>
+
+<script>
+// document.getElementById('contactForm').addEventListener('submit', function(event) {
+//     event.preventDefault();
+    
+//     const nombre = document.getElementById('nombre').value.trim();
+//     const email = document.getElementById('email').value.trim();
+//     const mensaje = document.getElementById('mensaje').value.trim();
+    
+//     if (nombre === '' || email === '' || mensaje === '') {
+//         alert('Todos los campos son obligatorios.');
+//         return;
+//     }
+    
+//     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+//     if (!emailPattern.test(email)) {
+//         alert('Por favor, ingrese un email válido.');
+//         return;
+//     }
+    
+//     // Si todas las validaciones pasan, redirigir a la url actual mas /contact-throught-mail
+//     fetch(window.location.href + 'contact-through-mail', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify({ nombre, email, mensaje })
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//         if (data.success) {
+//             alert('Mensaje enviado con éxito.');
+//             document.getElementById('contactForm').reset();
+//         } else {
+//             alert('Hubo un error al enviar el mensaje.');
+//         }
+//     })
+//     .catch(error => {
+//         console.error('Error:', error);
+//         alert('Hubo un error al enviar el mensaje.');
+//     });
+</script>

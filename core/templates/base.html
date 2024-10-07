@@ -32,7 +32,9 @@
     <!-- Navbar -->
      {% include 'navbar.html' with company=company %}
 
-    {% block content %}{% endblock %}
+    {% block content %}
+    {% comment %} the content {% endcomment %}
+    {% endblock %}
 
     <!-- Footer -->
     {% include 'footer.html' with company=company %}

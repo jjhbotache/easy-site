@@ -106,7 +106,7 @@ def get_color_variations(hex_color, adjustment_percentage=0.3):
         'darker': rgb_to_hex(darker_rgb)[1:]
     }
 
-    print(output_colors)
+    # print(output_colors)
     return output_colors
 
 # ------------------------------------------------------------------------------------------

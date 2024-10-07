@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ company.name }} - Nosotros{% endblock %}
+{% block icon %}
+    <link rel="icon" href="{{ company.logo_small.url }}">
+{% endblock %}
+
+{% block content %}
+<main class="flex flex-col flex-1">
+    <!-- Sección Nosotros -->
+    <section class="py-36">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-6 text-center primary-color">Nosotros</h2>
+            <p class="text-lg mb-8 text-center text-color">
+                {{ company.company_description }}
+            </p>
+            <a href="/contacto" class="block w-max mx-auto font-bold py-2 px-4 rounded transition duration-300 primary-bg bg-color">
+                Contáctanos
+            </a>
+        </div>
+    </section>
+</main>
+{% endblock content %}

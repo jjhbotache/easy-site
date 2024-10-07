@@ -1,26 +1,38 @@
 <!-- components/navbar.html -->
 
-
 <nav class="navbar shadow-lg h-16 flex secondary-light-bg">
-    <div class="flex justify-between">
-      <div class="flex space-x-7">
-        <div>
-          <!-- Logo de la empresa -->
-          <a href="#" class="flex items-center py-4 px-2">
-            <img src={{company.logo_small.url}} alt="Logo" class="h-8 w-8 mr-2">
-          </a>
-        </div>
-        <!-- Enlaces de navegación primaria -->
-        <div class="hidden md:flex items-center space-x-1">
-          <a href="#" class="navbar__link py-4 px-2  font-semibold transition duration-300 ">Inicio</a>
-          <a href="#" class="navbar__link py-4 px-2  font-semibold transition duration-300 ">Nosotros</a>
-          <a href="#" class="navbar__link py-4 px-2  font-semibold transition duration-300 ">Catálogo</a>
-          <a href="#" class="navbar__link py-4 px-2  font-semibold transition duration-300 ">Contacto</a>
-        </div>
-      </div>
-      <!-- Botón de Agendar Cita -->
-      {% comment %} <div class="hidden md:flex items-center space-x-3 ">
-        <a href="#" class="py-2 px-2 font-medium text-white bg-green-500 rounded hover:bg-green-400 transition duration-300">Agendar Cita</a>
-      </div> {% endcomment %}
+  <div class="flex justify-between">
+    <div class="flex space-x-7">
+    <div>
+      <!-- Logo de la empresa -->
+      <a href="#" class="flex items-center py-4 px-2 ">
+      <img src={{company.logo_small.url}} alt="Logo" class="h-8 w-8 mr-2 transition-all hover:scale-150 transform duration-500 navbar__logo-img">
+      </a>
     </div>
+    <!-- Enlaces de navegación primaria -->
+    <div class="hidden md:flex items-center space-x-1">
+      <a href="/" class="navbar__link py-4 px-2  font-semibold transition duration-300 ">Inicio</a>
+      <a href="/nosotros" class="navbar__link py-4 px-2  font-semibold transition duration-300 ">Nosotros</a>
+      <a href="/catalogo" class="navbar__link py-4 px-2  font-semibold transition duration-300 ">Catálogo</a>
+      <a href="/contacto" class="navbar__link py-4 px-2  font-semibold transition duration-300 ">Contacto</a>
+    </div>
+    </div>
+    <!-- Botón de Agendar Cita -->
+    {% comment %} <div class="hidden md:flex items-center space-x-3 ">
+    <a href="#" class="py-2 px-2 font-medium text-white bg-green-500 rounded hover:bg-green-400 transition duration-300">Agendar Cita</a>
+    </div> {% endcomment %}
+  </div>
 </nav>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+  const links = document.querySelectorAll('.navbar__link');
+  const firstSegment = window.location.pathname.split('/')[1];
+
+  links.forEach(link => {
+    const url = new URL(link.href);
+    url.pathname = `/${firstSegment}${url.pathname}`;
+    link.href = url.href;
+  });
+  });
+</script>

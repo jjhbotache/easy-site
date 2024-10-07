@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Éxito en el envío del correo{% endblock %}
+
+{% block icon %}
+    <link rel="icon" href="{{company.logo_small.url}}">
+{% endblock %}
+
+{% block content %}
+<main class="flex flex-col flex-1a">
+    <!-- Mensaje de éxito -->
+    <section class="py-36">
+        <div class="container mx-auto px-4 text-center">
+            <div class="bg-white p-8 rounded shadow-md">
+                <h1 class="text-3xl font-bold primary-color mb-4">Correo enviado con éxito</h1>
+                <p class="text-lg text-gray-700 mb-8">Gracias por contactarnos. Hemos recibido tu mensaje y te responderemos a la brevedad.</p>
+                <a href="/" class="block w-max mx-auto font-bold py-2 px-4 rounded transition duration-300 primary-bg bg-color">
+                    Volver al inicio
+                </a>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock content %}
