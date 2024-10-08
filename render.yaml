@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: easy_site
+    env: python
+    buildCommand: pip install -r requirements.txt  # Instala las dependencias
+    startCommand: gunicorn easy_site.wsgi  # Arranca el servidor usando gunicorn
+    autoDeploy: true  # Para auto despliegue con cada push
+    envVars:
+      - key: GOOGLE_APP_PASSWORD
+        value: kzpw cfoe gjtx iqtr  # Añade tu variable de entorno
+    postdeploy:
+      - python manage.py migrate  # Aplica migraciones después de construir
+      - python manage.py collectstatic --noinput  # Recolecta los archivos estáticos
