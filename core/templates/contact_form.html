@@ -3,15 +3,15 @@
       {% csrf_token %}
       <div class="mb-4">
           <label for="nombre" class="block font-bold mb-2 primary-color">Nombre</label>
-          <input type="text" id="nombre" name="nombre" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 secondary-light-bg">
+          <input required type="text" id="nombre" name="nombre" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 secondary-light-bg">
       </div>
       <div class="mb-4">
           <label for="email" class="block font-bold mb-2 primary-color">Email</label>
-          <input type="email" id="email" name="email" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 secondary-light-bg">
+          <input required type="email" id="email" name="email" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 secondary-light-bg">
       </div>
       <div class="mb-4">
           <label for="mensaje" class="block font-bold mb-2 primary-color">Mensaje</label>
-          <textarea id="mensaje" name="mensaje" rows="4" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 secondary-light-bg"></textarea>
+          <textarea required id="mensaje" name="mensaje" rows="4" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 secondary-light-bg"></textarea>
       </div>
       <button type="submit" class="w-full text-white font-bold py-2 px-4 rounded transition duration-300 secondary-bg primary-color">
           Enviar Mensaje

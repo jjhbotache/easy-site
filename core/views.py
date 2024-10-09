@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from core.logic.helpers.logic_helpers import company_from_request, send_gmail
 from core.logic.helpers.str_helpers import get_color_variations, get_company_name_from_url
 from core.models import Product, Company
@@ -101,3 +101,20 @@ def contact_through_mail(request):
     # redirect to home
     print('redirecting to home')
     redirect('/home')
+    
+def product_detail(request, product_id):
+    company = company_from_request(request)
+    product = get_object_or_404(Product, id=product_id, company=company)
+    
+    colors = {
+        "background_color": company.background_color,
+        "text_color": company.text_color,
+        "primary_color": get_color_variations(company.primary_color),
+        "secondary_color": get_color_variations(company.secondary_color)
+    }
+    
+    return render(request, 'pages/product.html', {
+        "company": company,
+        "colors": colors,
+        "product": product
+    })

@@ -15,10 +15,35 @@
             <p class="text-lg mb-8 text-center text-color">
                 {{ company.company_description }}
             </p>
-            <a href="/contacto" class="block w-max mx-auto font-bold py-2 px-4 rounded transition duration-300 primary-bg bg-color">
+            <a href="/contacto" class=" link block w-max mx-auto font-bold py-2 px-4 rounded transition duration-300 primary-bg bg-color">
                 Contáctanos
             </a>
         </div>
     </section>
 </main>
 {% endblock content %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const menuButton = document.getElementById('menu-button');
+      const mobileMenu = document.querySelector('.mobile-menu');
+      const links = document.querySelectorAll('.navbar__link');
+      const firstSegment = window.location.pathname.split('/')[1];
+  
+      menuButton.addEventListener('click', function() {
+        mobileMenu.classList.toggle('hidden');
+      });
+  
+      links.forEach(link => {
+        const url = new URL(link.href);
+        url.pathname = `/${firstSegment}${url.pathname}`;
+        link.href = url.href;
+      });
+    });
+  
+    function takeToContact(event) {
+      event.preventDefault();
+      const firstSegment = window.location.pathname.split('/')[1];
+      window.location.href = `/${firstSegment}/contacto`;
+    }
+  </script>

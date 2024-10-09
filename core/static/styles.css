@@ -33,19 +33,18 @@ body{
 }
 
 
-
-
+/* global */
+/* add styles to all hover btns */
+button:hover{
+    transform: scale(1.01);
+}
 
 
 
 /* navbar */
-.navbar__link{
-    color: var(--text) !important;
-    background: transparent;
-}
 .navbar__link:hover{
     color: var(--primary) !important;
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
 
@@ -55,18 +54,31 @@ body{
 
 
 /* home */
-.slider-img{
+.slider__img{
     max-height: 80vh;
     height: 100%;
-    object-fit: fill;
+    object-fit: cover;
 }
 .slider__data {
     position: absolute;
     bottom: 0;
     width: 100%;
     padding: 2rem;
-    height: 12rem;
+    height: 20vh;
+    display: flex;
+    flex-direction: column;
 }
+.slider__data p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2; /* Número de líneas a mostrar */
+    line-clamp: 2; /* Número de líneas a mostrar */
+    white-space: normal; /* Asegúrate de que el texto se ajuste a las líneas */
+}
+
+
 .slider__data::before{
     content: '';
     z-index: 0;
@@ -77,4 +89,13 @@ body{
     height: 100%;
     background: var(--primary);
     opacity: 0.8;
+}
+
+
+/* product */
+.product-image-container{
+    width: 100%;
+    aspect-ratio: 4 / 3; /* Relación de aspecto 4:3 */
+    overflow: hidden;
+    border-radius: 0.5rem; /* rounded-lg */
 }

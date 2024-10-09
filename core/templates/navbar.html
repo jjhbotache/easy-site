@@ -1,38 +1,60 @@
 <!-- components/navbar.html -->
 
-<nav class="navbar shadow-lg h-16 flex secondary-light-bg">
-  <div class="flex justify-between">
+<nav class="shadow-lg h-16 flex secondary-light-bg">
+  <div class="flex justify-between w-full">
     <div class="flex space-x-7">
-    <div>
-      <!-- Logo de la empresa -->
-      <a href="#" class="flex items-center py-4 px-2 ">
-      <img src={{company.logo_small.url}} alt="Logo" class="h-8 w-8 mr-2 transition-all hover:scale-150 transform duration-500 navbar__logo-img">
-      </a>
+      <div>
+        <!-- Logo de la empresa -->
+        <a href="#" class="flex items-center py-4 px-2">
+          <img src={{company.logo_small.url}} alt="Logo" class="h-8 w-8 mr-2 transition-transform duration-500 transform hover:scale-150">
+        </a>
+      </div>
+      <!-- Enlaces de navegación primaria -->
+      <div class="hidden md:flex items-center space-x-1">
+        <a href="/" class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300">Inicio</a>
+        <a href="/nosotros" class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300">Nosotros</a>
+        <a href="/catalogo" class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300">Catálogo</a>
+        <a href="/contacto" class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300">Contacto</a>
+      </div>
     </div>
-    <!-- Enlaces de navegación primaria -->
-    <div class="hidden md:flex items-center space-x-1">
-      <a href="/" class="navbar__link py-4 px-2  font-semibold transition duration-300 ">Inicio</a>
-      <a href="/nosotros" class="navbar__link py-4 px-2  font-semibold transition duration-300 ">Nosotros</a>
-      <a href="/catalogo" class="navbar__link py-4 px-2  font-semibold transition duration-300 ">Catálogo</a>
-      <a href="/contacto" class="navbar__link py-4 px-2  font-semibold transition duration-300 ">Contacto</a>
+    <!-- Botón de menú hamburguesa para pantallas pequeñas -->
+    <div class="md:hidden flex items-center">
+      <button id="menu-button" class="outline-none">
+        <svg class="w-6 h-6 text-gray-500 hover:text-gray-600" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+          <path d="M4 6h16M4 12h16m-7 6h7"></path>
+        a</svg>
+      </button>
     </div>
-    </div>
-    <!-- Botón de Agendar Cita -->
-    {% comment %} <div class="hidden md:flex items-center space-x-3 ">
-    <a href="#" class="py-2 px-2 font-medium text-white bg-green-500 rounded hover:bg-green-400 transition duration-300">Agendar Cita</a>
-    </div> {% endcomment %}
   </div>
 </nav>
 
+<!-- Menú móvil -->
+<div class="md:hidden">
+  <div class="hidden  mobile-menu">
+    <ul class="border-black border-b">
+      <li><a href="/" class="navbar__link link block text-sm px-2 py-4 secondary-light-bg transition duration-300">Inicio</a></li>
+      <li><a href="/nosotros" class="navbar__link link block text-sm px-2 py-4 secondary-light-bg transition duration-300">Nosotros</a></li>
+      <li><a href="/catalogo" class="navbar__link link block text-sm px-2 py-4 secondary-light-bg transition duration-300">Catálogo</a></li>
+      <li><a href="/contacto" class="navbar__link link block text-sm px-2 py-4 secondary-light-bg transition duration-300">Contacto</a></li>
+    </ul>
+  </div>
+</div>
+
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-  const links = document.querySelectorAll('.navbar__link');
-  const firstSegment = window.location.pathname.split('/')[1];
+    const menuButton = document.getElementById('menu-button');
+    const mobileMenu = document.querySelector('.mobile-menu');
+    const links = document.querySelectorAll('.link');
+    const firstSegment = window.location.pathname.split('/')[1];
 
-  links.forEach(link => {
-    const url = new URL(link.href);
-    url.pathname = `/${firstSegment}${url.pathname}`;
-    link.href = url.href;
-  });
+    menuButton.addEventListener('click', function() {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    links.forEach(link => {
+      const url = new URL(link.href);
+      url.pathname = `/${firstSegment}${url.pathname}`;
+      link.href = url.href;
+    });
   });
 </script>
