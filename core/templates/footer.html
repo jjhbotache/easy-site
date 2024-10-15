@@ -1,40 +1,51 @@
+<!-- last ribbon -->
 <!-- components/footer.html -->
-<footer class="primary-dark-bg text-color">
+<svg  style="transform:rotate(0deg) translate(0,2px); transition: 0.3s" viewBox="0 0 1440 170" version="1.1" xmlns="http://www.w3.org/2000/svg" class="-mt-40 wave">
+    <defs>
+      <linearGradient id="sw-gradient-0" x1="0" x2="0" y1="1" y2="0">
+        <stop stop-color="var(--primary-dark)" offset="20%"></stop>
+        <stop stop-color="var(--primary-light)" offset="80%"></stop>
+      </linearGradient>
+    </defs>
+    <path style="transform:translate(0, 0px); opacity:1" fill="url(#sw-gradient-0)" d="M0,68L40,73.7C80,79,160,91,240,85C320,79,400,57,480,62.3C560,68,640,102,720,107.7C800,113,880,91,960,93.5C1040,96,1120,125,1200,136C1280,147,1360,142,1440,119C1520,96,1600,57,1680,39.7C1760,23,1840,28,1920,42.5C2000,57,2080,79,2160,99.2C2240,119,2320,136,2400,124.7C2480,113,2560,74,2640,68C2720,62,2800,91,2880,104.8C2960,119,3040,119,3120,107.7C3200,96,3280,74,3360,79.3C3440,85,3520,119,3600,116.2C3680,113,3760,74,3840,65.2C3920,57,4000,79,4080,79.3C4160,79,4240,57,4320,45.3C4400,34,4480,34,4560,39.7C4640,45,4720,57,4800,73.7C4880,91,4960,113,5040,107.7C5120,102,5200,68,5280,70.8C5360,74,5440,113,5520,116.2C5600,119,5680,85,5720,68L5760,51L5760,170L5720,170C5680,170,5600,170,5520,170C5440,170,5360,170,5280,170C5200,170,5120,170,5040,170C4960,170,4880,170,4800,170C4720,170,4640,170,4560,170C4480,170,4400,170,4320,170C4240,170,4160,170,4080,170C4000,170,3920,170,3840,170C3760,170,3680,170,3600,170C3520,170,3440,170,3360,170C3280,170,3200,170,3120,170C3040,170,2960,170,2880,170C2800,170,2720,170,2640,170C2560,170,2480,170,2400,170C2320,170,2240,170,2160,170C2080,170,2000,170,1920,170C1840,170,1760,170,1680,170C1600,170,1520,170,1440,170C1360,170,1280,170,1200,170C1120,170,1040,170,960,170C880,170,800,170,720,170C640,170,560,170,480,170C400,170,320,170,240,170C160,170,80,170,40,170L0,170Z"></path>
+  </svg>
+<footer class=" text-color">
+
     <div class="max-w-6xl mx-auto px-4 py-10">
         <div class="flex flex-wrap justify-between">
             <div class="w-full md:w-1/4 text-center md:text-left">
-                <h5 class="uppercase mb-6 font-bold secondary-color">{{company.name}}</h5>
+                <h5 class="uppercase mb-6 font-bold">{{company.name}}</h5>
                 <ul class="mb-4">
                     <li class="mt-2">
-                        <a href="#" class="hover:underline secondary-light-color">Contacto</a>
+                        <a href="#" class="hover:underline ">Contacto</a>
                     </li>
                 </ul>
             </div>
             <div class="w-full md:w-1/4 text-center md:text-left">
-                <h5 class="uppercase mb-6 font-bold secondary-color">Contacto</h5>
+                <h5 class="uppercase mb-6 font-bold">Contacto</h5>
                 <ul class="mb-4">
                     <li class="mt-2">
-                        <span class="secondary-light-color">Dirección: {{company.location}}</span>
+                        <span class="">Dirección: {{company.location}}</span>
                     </li>
                     <li class="mt-2">
-                        <span class="secondary-light-color">Teléfono: {{company.whatsapp_number}}</span>
+                        <span class="">Teléfono: {{company.whatsapp_number}}</span>
                     </li>
                     <li class="mt-2">
-                        <span class="secondary-light-color">Email: {{ company.email }}</span>
+                        <span class="">Email: {{ company.email }}</span>
                     </li>
                 </ul>
             </div>
             <div class="w-full md:w-1/4 text-center md:text-left">
-                <h5 class="uppercase mb-6 font-bold secondary-color">Redes Sociales</h5>
+                <h5 class="uppercase mb-6 font-bold">Redes Sociales</h5>
                 <ul class="mb-4">
                     {% if company.facebook %}
                     <li class="mt-2">
-                        <a href="{{ company.facebook }}" class="hover:underline secondary-light-color">Facebook</a>
+                        <a href="{{ company.facebook }}" class="hover:underline ">Facebook</a>
                     </li>
                     {% endif %}
                     {% if company.instagram %}
                     <li class="mt-2">
-                        <a href="{{ company.instagram }}" class="hover:underline secondary-light-color">Instagram</a>
+                        <a href="{{ company.instagram }}" class="hover:underline ">Instagram</a>
                     </li>
                     {% endif %}
                 </ul>

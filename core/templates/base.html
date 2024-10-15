@@ -1,11 +1,13 @@
 {% load static %}
 
-<html lang="es" class="scroll-smooth dark">
+<html lang="es" class="dark" >
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-straight/css/uicons-solid-straight.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-chubby/css/uicons-regular-chubby.css'>
 
     <title>{% block title %}Landing{% endblock %}</title>
     {% block icon %}{% endblock %}
@@ -25,10 +27,12 @@
             --secondary-dark: #{{colors.secondary_color.darker}};
         }
 
+        
+
 
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col bg-bg text-color scroll-smooth">
     <!-- Navbar -->
      {% include 'navbar.html' with company=company %}
 
@@ -39,4 +43,5 @@
     <!-- Footer -->
     {% include 'footer.html' with company=company %}
 </body>
+
 </html>

@@ -36,7 +36,7 @@ def catalog(request):
         "products": Product.objects.filter(company=company)
     })
 
-def about(request):
+def us(request):
     company = company_from_request(request)
     
     colors = {
@@ -46,7 +46,7 @@ def about(request):
         "secondary_color": get_color_variations(company.secondary_color)
     }
     
-    return render(request, 'pages/about.html', {
+    return render(request, 'pages/us.html', {
         "company": company,
         "colors": colors
     })
@@ -113,8 +113,15 @@ def product_detail(request, product_id):
         "secondary_color": get_color_variations(company.secondary_color)
     }
     
+    # treatment of product data
+    product.features = [f.strip() for f in product.features.split(',')]
+    product.price = f"{round(product.price*1000):,}".replace(",", ".")
+    related_products = Product.objects.filter(company=company).exclude(id=product_id)
+    
+    
     return render(request, 'pages/product.html', {
         "company": company,
         "colors": colors,
-        "product": product
+        "product": product,
+        "related_products": related_products
     })

@@ -1,50 +1,64 @@
 <!-- components/navbar.html -->
 
-<nav class="shadow-lg h-16 flex secondary-light-bg">
+<nav class="shadow-lg h-16 flex secondary-light-bg sticky top-0 z-50 ">
   <div class="flex justify-between w-full">
     <div class="flex space-x-7">
       <div>
         <!-- Logo de la empresa -->
-        <a href="#" class="flex items-center py-4 px-2">
+        <a href="/" class="link flex items-center py-4 px-2 icon">
           <img src={{company.logo_small.url}} alt="Logo" class="h-8 w-8 mr-2 transition-transform duration-500 transform hover:scale-150">
         </a>
       </div>
       <!-- Enlaces de navegación primaria -->
-      <div class="hidden md:flex items-center space-x-1">
-        <a href="/" class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300">Inicio</a>
-        <a href="/nosotros" class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300">Nosotros</a>
-        <a href="/catalogo" class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300">Catálogo</a>
-        <a href="/contacto" class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300">Contacto</a>
+      <div class="hidden md:flex items-center gap-2">
+        <a href="/" class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300 text-color">Inicio</a>
+        <a href="/nosotros" class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300 text-color">Nosotros</a>
+        <a href="/catalogo" class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300 text-color">Catálogo</a>
+        <a href="/contacto" class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300 text-color">Contacto</a>
+        <button class="theme-toggle outline-none px-4 py-2 secondary-bg text-color rounded-full">
+        </button>
       </div>
     </div>
+
     <!-- Botón de menú hamburguesa para pantallas pequeñas -->
-    <div class="md:hidden flex items-center">
+    <div class="md:hidden flex items-center gap-2">
+      <button class="theme-toggle outline-none px-4 py-2 secondary-bg text-color rounded-full">
+      </button>
       <button id="menu-button" class="outline-none">
-        <svg class="w-6 h-6 text-gray-500 hover:text-gray-600" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+        <svg class="w-6 h-6 text-color hover:text-gray-600" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
           <path d="M4 6h16M4 12h16m-7 6h7"></path>
-        a</svg>
+        </svg>
       </button>
     </div>
+
   </div>
 </nav>
 
 <!-- Menú móvil -->
 <div class="md:hidden">
-  <div class="hidden  mobile-menu">
+  <div class="hidden mobile-menu">
     <ul class="border-black border-b">
-      <li><a href="/" class="navbar__link link block text-sm px-2 py-4 secondary-light-bg transition duration-300">Inicio</a></li>
-      <li><a href="/nosotros" class="navbar__link link block text-sm px-2 py-4 secondary-light-bg transition duration-300">Nosotros</a></li>
-      <li><a href="/catalogo" class="navbar__link link block text-sm px-2 py-4 secondary-light-bg transition duration-300">Catálogo</a></li>
-      <li><a href="/contacto" class="navbar__link link block text-sm px-2 py-4 secondary-light-bg transition duration-300">Contacto</a></li>
+      <li><a href="/" class="navbar__link link block text-sm px-2 py-4 secondary-light-bg transition duration-300 text-color">Inicio</a></li>
+      <li><a href="/nosotros" class="navbar__link link block text-sm px-2 py-4 secondary-light-bg transition duration-300 text-color">Nosotros</a></li>
+      <li><a href="/catalogo" class="navbar__link link block text-sm px-2 py-4 secondary-light-bg transition duration-300 text-color">Catálogo</a></li>
+      <li><a href="/contacto" class="navbar__link link block text-sm px-2 py-4 secondary-light-bg transition duration-300 text-color">Contacto</a></li>
+      <li><a href="/contacto" class="navbar__link link block text-sm px-2 py-4 secondary-light-bg transition duration-300 text-color">Contacto</a></li>
     </ul>
   </div>
 </div>
 
 <script>
+  const setThemeIcon = (button) => {
+    button.innerHTML = document.documentElement.classList.contains('dark') 
+      ? '<i class="fi fi-rc-moon-stars"></i>' 
+      : '<i class="fi fi-rc-sun"></i>';
+  };
+
   document.addEventListener('DOMContentLoaded', function() {
     const menuButton = document.getElementById('menu-button');
     const mobileMenu = document.querySelector('.mobile-menu');
     const links = document.querySelectorAll('.link');
+    const themeToggleButtons = document.querySelectorAll('.theme-toggle');
     const firstSegment = window.location.pathname.split('/')[1];
 
     menuButton.addEventListener('click', function() {
@@ -55,6 +69,14 @@
       const url = new URL(link.href);
       url.pathname = `/${firstSegment}${url.pathname}`;
       link.href = url.href;
+    });
+
+    themeToggleButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        document.documentElement.classList.toggle('dark');
+        themeToggleButtons.forEach(setThemeIcon);
+      });
+      setThemeIcon(button);
     });
   });
 </script>
