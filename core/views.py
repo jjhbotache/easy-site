@@ -123,7 +123,7 @@ def product_detail(request, product_id):
         "company": company,
         "colors": colors,
         "product": product,
-        "related_products": related_products
+        "related_products": related_products,
     })
     
     
@@ -142,5 +142,8 @@ def calendar_view(request):
     return render(request, 'pages/calendar.html', {
         'appointments': appointments,
         "company": company,
-        "colors": colors
+        "colors": colors,
+        "calendar_config": {
+            "hours": range(24),
+        }
     })

@@ -7,131 +7,89 @@
 {% endblock %}
 
 {% block content %}
-<main class="flex flex-col flex-1 bg-bg min-h-screen">
+<main class="flex flex-col bg-bg h-5/6 shadow-2xl">
     <!-- Encabezado -->
     <header class="bg-bg shadow-md p-4">
         <div class="flex justify-between items-center">
             <h1 class="text-2xl font-bold primary-dark-color">Mi Calendario</h1>
-            <div class="space-x-2">
-                <button id="weekViewBtn" class="px-4 py-2 bg-primary text-bg rounded hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50">Semana</button>
-                <button id="monthViewBtn" class="px-4 py-2 bg-secondary-light text-secondary-dark rounded hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-opacity-50">Mes</button>
-            </div>
+            <button id="addEventBtn" class="p-2  primary-bg bg-color rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 flex items-center justify-evenly gap-2 ">
+                <i class="fi fi-rr-plus"></i>
+                Agregar Evento
+            </button>
         </div>
+        <hr class="primary-border border mt-2">
     </header>
 
     <!-- Contenido principal -->
     <main class="flex-grow overflow-auto">
-        <!-- Vista semanal -->
-        <div id="weekView" class="hidden">
-            <div class="grid grid-cols-8 gap-1 bg-bg p-4">
-                <div class="col-span-1"></div>
-                <div class="col-span-1 text-center font-semibold primary-light-border border">Lun</div>
-                <div class="col-span-1 text-center font-semibold primary-light-border border">Mar</div>
-                <div class="col-span-1 text-center font-semibold primary-light-border border">Mié</div>
-                <div class="col-span-1 text-center font-semibold primary-light-border border">Jue</div>
-                <div class="col-span-1 text-center font-semibold primary-light-border border">Vie</div>
-                <div class="col-span-1 text-center font-semibold primary-light-border border">Sáb</div>
-                <div class="col-span-1 text-center font-semibold primary-light-border border">Dom</div>
-                
-                <!-- Horas y eventos (simplificado) -->
-                {% for appointment in appointments %}
-                <div class="col-span-1 text-right pr-2 primary-light-border border">{{ appointment.start_datetime|date:"H:i" }}</div>
-                <div class="col-span-7 grid grid-cols-7 gap-1 primary-light-border border">
-                    <div class="secondary-light-bg h-16 primary-border border">{{ appointment.start_datetime|date:"d M Y" }} - {{ appointment.end_datetime|date:"H:i" }}</div>
+        <!-- Vista de 3 días -->
+        <div id="threeDayView">
+            <div class="grid grid-cols-4 gap-1 bg-bg p-4">
+                <!-- first row -->
+                <div class="sticky top-0 bg-bg z-10">
+                    <div class="flex justify-evenly items-center">
+                        <button id="prevDaysBtn" class="p-2 primary-bg bg-color rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50" title="Previos 3 días"> <i class="fi fi-rr-angle-left"></i> </button>
+                        <button id="nextDaysBtn" class="p-2 primary-bg bg-color rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50" title="Próximos 3 días"> <i class="fi fi-rr-angle-right"></i> </button>
+                    </div>
                 </div>
-                {% endfor %}
-            </div>
-        </div>
-
-        <!-- Vista mensual -->
-        <div id="monthView" class="hidden">
-            <div class="grid grid-cols-7 gap-1 bg-bg p-4">
-                <div class="text-center font-semibold">Lun</div>
-                <div class="text-center font-semibold">Mar</div>
-                <div class="text-center font-semibold">Mié</div>
-                <div class="text-center font-semibold">Jue</div>
-                <div class="text-center font-semibold">Vie</div>
-                <div class="text-center font-semibold">Sáb</div>
-                <div class="text-center font-semibold">Dom</div>
+                <div id="headerDay1"  class="sticky top-0 bg-bg z-10 text-center font-semibold primary-light-border border">Día 1</div>
+                <div id="headerDay2"  class="sticky top-0 bg-bg z-10 text-center font-semibold primary-light-border border">Día 2</div>
+                <div id="headerDay3"  class="sticky top-0 bg-bg z-10 text-center font-semibold primary-light-border border">Día 3</div>
                 
-                <!-- Días del mes (simplificado) -->
-                {% for appointment in appointments %}
-                <div class="bg-gray-100 h-32 primary-border p-2">{{ appointment.start_datetime|date:"d M Y" }}: {{ appointment.start_datetime|date:"H:i" }} - {{ appointment.end_datetime|date:"H:i" }}</div>
-                {% endfor %}
+                <!-- hours -->
+            {% for i in calendar_config.hours %}
+                <div class="text-right pr-2 primary-light-border border h-12 grid place-items-baseline">{{ i }}:00</div>
+                <div id="day1Hour{{ i }}" class="primary-light-border border"></div>
+                <div id="day2Hour{{ i }}" class="primary-light-border border"></div>
+                <div id="day3Hour{{ i }}" class="primary-light-border border"></div>
+            {% endfor %}
+
             </div>
         </div>
     </main>
 </main>
 
-<!-- Botón flotante para agregar evento -->
-<button id="addEventBtn" class="fixed bottom-8 right-8 bg-primary text-bg rounded-full p-4 shadow-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50">
-    <i class="fas fa-plus"></i>
-</button>
-
 <!-- Modal para agregar evento -->
-<div id="eventModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center">
-    <div class="bg-bg p-8 rounded-lg shadow-xl w-96">
-        <h2 class="text-2xl font-bold mb-4">Agregar Evento</h2>
-        <form>
-            <div class="mb-4">
-                <label for="eventTitle" class="block text-gray-700 text-sm font-bold mb-2">Título</label>
-                <input type="text" id="eventTitle" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-            </div>
-            <div class="mb-4">
-                <label for="eventDate" class="block text-gray-700 text-sm font-bold mb-2">Fecha</label>
-                <input type="date" id="eventDate" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-            </div>
-            <div class="mb-4">
-                <label for="eventTime" class="block text-gray-700 text-sm font-bold mb-2">Hora</label>
-                <input type="time" id="eventTime" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-            </div>
-            <div class="flex items-center justify-between">
-                <button type="submit" class="bg-primary hover:bg-primary-dark text-bg font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Guardar</button>
-                <button type="button" id="closeModalBtn" class="bg-gray-300 hover:bg-gray-400 primary-color font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Cancelar</button>
-            </div>
-        </form>
-    </div>
-</div>
+<dialog id="eventModal" class="
+primary-light-bg p-8 rounded-lg shadow-xl w-96 z-10
+">
+    <h2 class="text-2xl font-bold mb-4">Agregar Evento</h2>
+    <form method="dialog">
+        <div class="mb-4">
+            <label for="eventTitle" class="block text-gray-700 text-sm font-bold mb-2">Título</label>
+            <input type="text" id="eventTitle" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+        <div class="mb-4">
+            <label for="eventDate" class="block text-gray-700 text-sm font-bold mb-2">Fecha</label>
+            <input type="date" id="eventDate" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+        <div class="mb-4">
+            <label for="eventTime" class="block text-gray-700 text-sm font-bold mb-2">Hora</label>
+            <input type="time" id="eventTime" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+        <div class="flex items-center justify-between">
+            <button type="submit" class="bg-primary hover:bg-primary-dark text-bg font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Guardar</button>
+            <button type="button" id="closeModalBtn" class="bg-gray-300 hover:bg-gray-400 primary-color font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Cancelar</button>
+        </div>
+    </form>
+</dialog>
 
 <script>
-    // Lógica para cambiar entre vistas y mostrar/ocultar el modal
-    const weekView = document.getElementById('weekView');
-    const monthView = document.getElementById('monthView');
-    const weekViewBtn = document.getElementById('weekViewBtn');
-    const monthViewBtn = document.getElementById('monthViewBtn');
+    // Lógica para mostrar/ocultar el modal
     const addEventBtn = document.getElementById('addEventBtn');
     const eventModal = document.getElementById('eventModal');
     const closeModalBtn = document.getElementById('closeModalBtn');
 
-    weekViewBtn.addEventListener('click', () => {
-        weekView.classList.remove('hidden');
-        monthView.classList.add('hidden');
-        weekViewBtn.classList.add('bg-primary', 'text-bg');
-        weekViewBtn.classList.remove('bg-secondary-light', 'text-secondary-dark');
-        monthViewBtn.classList.add('bg-secondary-light', 'text-secondary-dark');
-        monthViewBtn.classList.remove('bg-primary', 'text-bg');
-    });
-
-    monthViewBtn.addEventListener('click', () => {
-        monthView.classList.remove('hidden');
-        weekView.classList.add('hidden');
-        monthViewBtn.classList.add('bg-primary', 'text-bg');
-        monthViewBtn.classList.remove('bg-secondary-light', 'text-secondary-dark');
-        weekViewBtn.classList.add('bg-secondary-light', 'text-secondary-dark');
-        weekViewBtn.classList.remove('bg-primary', 'text-bg');
-    });
-
     addEventBtn.addEventListener('click', () => {
-        eventModal.classList.remove('hidden');
-        eventModal.classList.add('flex');
+        eventModal.showModal();
     });
 
     closeModalBtn.addEventListener('click', () => {
-        eventModal.classList.add('hidden');
-        eventModal.classList.remove('flex');
+        eventModal.close();
     });
 
-    // Mostrar la vista semanal por defecto
-    weekView.classList.remove('hidden');
+    // Mostrar la vista de 3 días por defecto
+    const threeDayView = document.getElementById('threeDayView');
+    threeDayView.classList.remove('hidden');
 </script>
 {% endblock content %}

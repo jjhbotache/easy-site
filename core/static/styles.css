@@ -71,6 +71,11 @@ html:not(.dark) .bg-border{border-color: var(--bg) !important;}
     --tw-ring-color: var(--primary-light);
 }
 
+dialog:-internal-dialog-in-top-layer::backdrop {
+    background-color: rgba(0, 0, 0, .8) !important;
+}
+
+
 
 /* global */
 /* add styles to all hover btns */
