@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from core.logic.helpers.logic_helpers import company_from_request, send_gmail
 from core.logic.helpers.str_helpers import get_color_variations, get_company_name_from_url
-from core.models import Product, Company
+from core.models import Appointment, Product, Company
 from django.conf import settings
 
 def home(request):
@@ -124,4 +124,23 @@ def product_detail(request, product_id):
         "colors": colors,
         "product": product,
         "related_products": related_products
+    })
+    
+    
+
+
+def calendar_view(request):
+    appointments = Appointment.objects.all()
+    company = company_from_request(request)
+    colors = {
+        "background_color": company.background_color,
+        "text_color": company.text_color,
+        "primary_color": get_color_variations(company.primary_color),
+        "secondary_color": get_color_variations(company.secondary_color)
+    }
+    
+    return render(request, 'pages/calendar.html', {
+        'appointments': appointments,
+        "company": company,
+        "colors": colors
     })

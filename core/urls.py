@@ -5,7 +5,7 @@ from django.conf.urls.static import static
 
 from .logic.helpers.str_helpers import txt_to_url
 from .models import Company
-from .views import home, catalog, us, contact, contact_through_mail, product_detail
+from .views import home, catalog, us, contact, contact_through_mail, product_detail,calendar_view
 
 try: 
     companies = [txt_to_url(company.name) for company in Company.objects.all()]
@@ -17,6 +17,8 @@ try:
         *[path(f'{company}/contacto', contact, name="contact") for company in companies],
         *[path(f'{company}/contact-through-mail', contact_through_mail) for company in companies],
         *[path(f'{company}/producto/<int:product_id>/', product_detail, name="product_detail") for company in companies],
+        *[path(f'{company}/calendario', calendar_view, name="calendar") for company in companies],
+        
     ]
 except:
     patterns = []
