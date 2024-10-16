@@ -54,12 +54,24 @@
       : '<i class="fi fi-rc-sun"></i>';
   };
 
+  const applyTheme = (theme) => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  };
+
   document.addEventListener('DOMContentLoaded', function() {
     const menuButton = document.getElementById('menu-button');
     const mobileMenu = document.querySelector('.mobile-menu');
     const links = document.querySelectorAll('.link');
     const themeToggleButtons = document.querySelectorAll('.theme-toggle');
     const firstSegment = window.location.pathname.split('/')[1];
+
+    // Apply saved theme from localStorage
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    applyTheme(savedTheme);
 
     menuButton.addEventListener('click', function() {
       mobileMenu.classList.toggle('hidden');
@@ -73,7 +85,8 @@
 
     themeToggleButtons.forEach(button => {
       button.addEventListener('click', function() {
-        document.documentElement.classList.toggle('dark');
+        const newTheme = document.documentElement.classList.toggle('dark') ? 'dark' : 'light';
+        localStorage.setItem('theme', newTheme);
         themeToggleButtons.forEach(setThemeIcon);
       });
       setThemeIcon(button);

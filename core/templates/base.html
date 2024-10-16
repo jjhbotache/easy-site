@@ -1,6 +1,6 @@
 {% load static %}
 
-<html lang="es" class="dark" >
+<html lang="es" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,10 +8,11 @@
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-straight/css/uicons-solid-straight.css'>
     <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-chubby/css/uicons-regular-chubby.css'>
-
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-brands/css/uicons-brands.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
+    
     <title>{% block title %}Landing{% endblock %}</title>
     {% block icon %}{% endblock %}
-
 
     <style>
         :root {
@@ -26,15 +27,11 @@
             --secondary-light: #{{colors.secondary_color.lighter}};
             --secondary-dark: #{{colors.secondary_color.darker}};
         }
-
-        
-
-
     </style>
 </head>
 <body class="min-h-screen flex flex-col bg-bg text-color scroll-smooth">
     <!-- Navbar -->
-     {% include 'navbar.html' with company=company %}
+    {% include 'navbar.html' with company=company %}
 
     {% block content %}
     {% comment %} the content {% endcomment %}
@@ -42,6 +39,21 @@
 
     <!-- Footer -->
     {% include 'footer.html' with company=company %}
-</body>
 
+    <!-- Botón flotante de WhatsApp -->
+    {% if company.whatsapp_number and company.whatsapp_message %}
+    <div id="whatsapp-float" class="fixed bottom-6 right-6 flex items-center justify-center bg-green-500 text-white font-bold  rounded-full shadow-lg transition duration-300 hover:bg-green-600 floating " >
+        <a href="https://wa.me/{{ company.whatsapp_number }}?text={{ company.whatsapp_message }}" class=" text-3xl p-3">
+            <i class="fi fi-brands-whatsapp "></i>
+        </a>
+    <i id="close-whatsapp-float" class="fi fi-rr-cross absolute top-0 right-0 text-gray-500 bg-white rounded-full p-1 -mt-2 -mr-2 text-xs "></i>
+    </div>
+    {% endif %}
+
+    <script>
+        document.getElementById('close-whatsapp-float').addEventListener('click', function() {
+            document.getElementById('whatsapp-float').style.display = 'none';
+        });
+    </script>
+</body>
 </html>

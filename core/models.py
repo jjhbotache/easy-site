@@ -31,10 +31,13 @@ class Company(models.Model):
     whatsapp_number = models.CharField(max_length=20, blank=True, null=True, help_text="The number of the company in whatsapp. Dont use the +, write the extension number all together: 5491155555555")
     whatsapp_message = models.CharField(max_length=255, blank=True, null=True, help_text="The message that will be sent by the user to the company")
     # more data
+    message_to_buy_product = models.CharField(max_length=255, default="Hola! me gustaría comprar este producto:", help_text="The message will be the one, that the user will send to the company to buy the product. e.g: 'I want to buy the product:'")
     general_data_for_products = models.TextField(blank=True, null=True, help_text="General data that will be shown in each product of page")
-    message_to_buy_product = models.TextField(default="Hola! me gustaría comprar este producto:", help_text="The message will be the one, that the user will send to the company to buy the product. e.g: 'I want to buy the product:'")
     
     owner = models.OneToOneField('core.User', on_delete=models.CASCADE, related_name='company')
+    
+    class Meta:
+        verbose_name_plural = "Company"
 
     def __str__(self):
         return self.name

@@ -27,6 +27,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 class CompanyAdmin(admin.ModelAdmin):
     
+    
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         if request.user.is_superuser:  # Si es superusuario, ve todo

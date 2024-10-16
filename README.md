@@ -1,5 +1,14 @@
 # EasySite
 
+### todo
+- migrate to postgres db
+- ~~add whatsbtn~~
+- create date mer
+- create date admin page?
+- create user scheduler page
+
+
+
 ### **Estructura General del Proyecto**
 
 #### **1. Roles del Usuario**
