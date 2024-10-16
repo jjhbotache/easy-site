@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.hashers import make_password
-from django.core.validators import FileExtensionValidator
+from django.core.validators import FileExtensionValidator, EmailValidator, RegexValidator
 from django.db import models
 
 class User(AbstractUser):
@@ -53,3 +53,18 @@ class Product(models.Model):
     def __str__(self):
         return self.name
     
+class Appointment(models.Model):
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='appointments')
+    start_datetime = models.DateTimeField()
+    end_datetime = models.DateTimeField()
+    full_name = models.CharField(max_length=255)
+    email = models.EmailField(blank=True, null=True, validators=[EmailValidator()])
+    phone_number = models.CharField(
+        max_length=20, 
+        blank=True, 
+        null=True, 
+        validators=[RegexValidator(regex=r'^\d{10,15}$', message="Enter a valid phone number.")]
+    )
+
+    def __str__(self):
+        return f"Appointment for {self.company.name} - {self.full_name} "

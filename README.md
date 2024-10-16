@@ -3,8 +3,7 @@
 ### todo
 - migrate to postgres db
 - ~~add whatsbtn~~
-- create date mer
-- create date admin page?
+- ~~create date mer~~
 - create user scheduler page
 
 
