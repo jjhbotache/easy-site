@@ -66,6 +66,50 @@ def contact(request):
         "colors": colors
     })
 
+def product_detail(request, product_id):
+    company = company_from_request(request)
+    product = get_object_or_404(Product, id=product_id, company=company)
+    
+    colors = {
+        "background_color": company.background_color,
+        "text_color": company.text_color,
+        "primary_color": get_color_variations(company.primary_color),
+        "secondary_color": get_color_variations(company.secondary_color)
+    }
+    
+    # treatment of product data
+    product.features = [f.strip() for f in product.features.split(',')]
+    product.price = f"{round(product.price*1000):,}".replace(",", ".")
+    related_products = Product.objects.filter(company=company).exclude(id=product_id)
+    
+    
+    return render(request, 'pages/product.html', {
+        "company": company,
+        "colors": colors,
+        "product": product,
+        "related_products": related_products,
+    })
+
+def calendar_view(request):
+    appointments = Appointment.objects.all()
+    company = company_from_request(request)
+    colors = {
+        "background_color": company.background_color,
+        "text_color": company.text_color,
+        "primary_color": get_color_variations(company.primary_color),
+        "secondary_color": get_color_variations(company.secondary_color)
+    }
+    
+    calendar_hours = list(range(24))
+    return render(request, 'pages/calendar.html', {
+        'appointments': appointments,
+        "company": company,
+        "colors": colors,
+        "calendar_config": {
+            "hours": calendar_hours,
+        }
+    })
+    
 def contact_through_mail(request):
     print('contact_through_mail')
     print(request)
@@ -101,49 +145,6 @@ def contact_through_mail(request):
     # redirect to home
     print('redirecting to home')
     redirect('/home')
-    
-def product_detail(request, product_id):
-    company = company_from_request(request)
-    product = get_object_or_404(Product, id=product_id, company=company)
-    
-    colors = {
-        "background_color": company.background_color,
-        "text_color": company.text_color,
-        "primary_color": get_color_variations(company.primary_color),
-        "secondary_color": get_color_variations(company.secondary_color)
-    }
-    
-    # treatment of product data
-    product.features = [f.strip() for f in product.features.split(',')]
-    product.price = f"{round(product.price*1000):,}".replace(",", ".")
-    related_products = Product.objects.filter(company=company).exclude(id=product_id)
-    
-    
-    return render(request, 'pages/product.html', {
-        "company": company,
-        "colors": colors,
-        "product": product,
-        "related_products": related_products,
-    })
-    
-    
 
 
-def calendar_view(request):
-    appointments = Appointment.objects.all()
-    company = company_from_request(request)
-    colors = {
-        "background_color": company.background_color,
-        "text_color": company.text_color,
-        "primary_color": get_color_variations(company.primary_color),
-        "secondary_color": get_color_variations(company.secondary_color)
-    }
-    
-    return render(request, 'pages/calendar.html', {
-        'appointments': appointments,
-        "company": company,
-        "colors": colors,
-        "calendar_config": {
-            "hours": range(24),
-        }
-    })
+# functon routes

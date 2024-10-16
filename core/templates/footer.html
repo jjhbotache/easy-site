@@ -36,13 +36,13 @@
                 <h5 class="uppercase mb-6 font-bold">Redes Sociales</h5>
                 <ul class="mb-4">
                     {% if company.facebook %}
-                    <li class="mt-2 flex gap-2 justify-start items-center">
+                    <li class="mt-2 flex gap-2 justify-center md:justify-start items-center">
                         <i class="fi fi-brands-facebook"></i>
                         <a href="{{ company.facebook }}" class="hover:underline ">Facebook</a>
                     </li>
                     {% endif %}
                     {% if company.instagram %}
-                    <li class="mt-2 flex gap-2 justify-start items-center">
+                    <li class="mt-2 flex gap-2 justify-center md:justify-start items-center">
                         <i class="fi fi-brands-instagram"></i>
                         <a href="{{ company.instagram }}" class="hover:underline ">Instagram</a>
                     </li>

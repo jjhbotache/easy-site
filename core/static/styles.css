@@ -71,21 +71,25 @@ html:not(.dark) .bg-border{border-color: var(--bg) !important;}
     --tw-ring-color: var(--primary-light);
 }
 
-dialog:-internal-dialog-in-top-layer::backdrop {
-    background-color: rgba(0, 0, 0, .8) !important;
-}
 
 
 
 /* global */
 /* add styles to all hover btns */
+dialog:-internal-dialog-in-top-layer::backdrop {
+    background-color: rgba(0, 0, 0, .8) !important;
+}
 button:not([id]):hover,
 a:not([id]):hover {
     transform: scale(1.01);
 }
-
 svg{
     background: transparent;
+}
+.scroll-hide {
+    scrollbar-width: none;
+    --webkit-scrollbar-width: none;
+    cursor: row-resize;
 }
 
 
@@ -165,6 +169,10 @@ footer{
     background: var(--primary-dark);
 }
 
+/* calendar */
+.current-day{
+    text-decoration: dashed;
+}
 
 /* floating animation */
 @keyframes floating {
