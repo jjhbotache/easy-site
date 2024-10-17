@@ -51,7 +51,7 @@ class Product(models.Model):
     image = models.ImageField(upload_to='products/', help_text="The image of the product (horizontal orientation with main part at the right))", validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'svg'])])
 
     def __str__(self):
-        return self.name
+        return f"{self.name} - {self.company}"
     
 class Appointment(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='appointments')
@@ -65,6 +65,6 @@ class Appointment(models.Model):
         null=True, 
         validators=[RegexValidator(regex=r'^\d{10,15}$', message="Enter a valid phone number.")]
     )
-
+    
     def __str__(self):
-        return f"Appointment for {self.company.name} - {self.full_name} "
+        return f"{self.full_name} ( {self.start_datetime} - {self.end_datetime} )"

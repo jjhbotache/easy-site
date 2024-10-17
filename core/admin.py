@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import Company, Product, User,Appointment
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'company', 'price')
+    # list_display = ('name', 'company', 'price')
 
     # Filtrar para que el usuario solo vea productos de su empresa
     def get_queryset(self, request):
@@ -46,10 +46,10 @@ class CompanyAdmin(admin.ModelAdmin):
         
 
 class AppointmentAdmin(admin.ModelAdmin):
-    def get_list_display(self, request):
-        if request.user.is_superuser:
-            return ('company', 'start_datetime', 'end_datetime', 'full_name')
-        return ('start_datetime', 'end_datetime', 'full_name')
+    # def get_list_display(self, request):
+    #     if request.user.is_superuser:
+    #         return ('company', 'start_datetime', 'end_datetime', 'full_name')
+    #     return ('start_datetime', 'end_datetime', 'full_name')
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)

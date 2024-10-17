@@ -92,6 +92,7 @@ def product_detail(request, product_id):
 
 def calendar_view(request):
     appointments = Appointment.objects.all()
+    appointments = list(Appointment.objects.all().values())
     company = company_from_request(request)
     colors = {
         "background_color": company.background_color,
@@ -99,14 +100,15 @@ def calendar_view(request):
         "primary_color": get_color_variations(company.primary_color),
         "secondary_color": get_color_variations(company.secondary_color)
     }
+    print(appointments)
     
-    calendar_hours = list(range(24))
+    
     return render(request, 'pages/calendar.html', {
         'appointments': appointments,
         "company": company,
         "colors": colors,
         "calendar_config": {
-            "hours": calendar_hours,
+            "appointment_duration": .25 #1 - .5 - .25
         }
     })
     

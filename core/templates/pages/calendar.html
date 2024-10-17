@@ -26,43 +26,54 @@
     </header>
 
     <!-- Contenido principal -->
-    <main id="calendar" class="flex-grow overflow-y-scroll scroll-hide">
-        <!-- </main>Vista de 3 días -->
-        <div >
-            <div class="grid grid-cols-4 gap-1 bg-bg p-4 pt-0">
-                <!-- firsts rows -->
-                <div class="sticky top-0 bg-bg z-10">
-                    <div class="flex justify-evenly items-center py-1">
-                        <button id="prevDaysBtn" class="py-1 px-2 primary-bg bg-color rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 active:bg-primary-dark active:ring-2 active:ring-primary active:ring-opacity-50" title="Previos 3 días">
-                            <i class="fi fi-rr-angle-left"></i>
-                        </button>
-                        <button id="nextDaysBtn" class="py-1 px-2 primary-bg bg-color rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 active:bg-primary-dark active:ring-2 active:ring-primary active:ring-opacity-50" title="Próximos 3 días">
-                            <i class="fi fi-rr-angle-right"></i>
-                        </button>
-                    </div>
+    <main class="flex-grow overflow-y-scroll scroll-hide">
+        <div id="calendar" class="grid grid-cols-4 gap-1 bg-bg p-4 pt-0" >
+            <!-- firsts rows -->
+            <div class="sticky top-0 bg-bg z-10">
+                <div class="flex justify-evenly items-center py-1">
+                    <button id="prevDaysBtn" class="py-1 px-2 primary-bg bg-color rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 active:bg-primary-dark active:ring-2 active:ring-primary active:ring-opacity-50" title="Previos 3 días">
+                        <i class="fi fi-rr-angle-left"></i>
+                    </button>
+                    <button id="nextDaysBtn" class="py-1 px-2 primary-bg bg-color rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 active:bg-primary-dark active:ring-2 active:ring-primary active:ring-opacity-50" title="Próximos 3 días">
+                        <i class="fi fi-rr-angle-right"></i>
+                    </button>
                 </div>
-                <div id="headerDay1"  class="sticky top-0 bg-bg z-10 text-center font-semibold primary-light-border border flex flex-col items-center gap-1 py-2">
-                    <span class="weekDay">lun</span>
-                    <span class="day p-1 rounded-full">1</span>
-                </div>
-                <div id="headerDay2"  class="sticky top-0 bg-bg z-10 text-center font-semibold primary-light-border border flex flex-col items-center gap-1 py-2">
-                    <span class="weekDay">lun</span>
-                    <span class="day p-1 rounded-full">1</span>
-                </div>
-                <div id="headerDay3"  class="sticky top-0 bg-bg z-10 text-center font-semibold primary-light-border border flex flex-col items-center gap-1 py-2">
-                    <span class="weekDay">lun</span>
-                    <span class="day p-1 rounded-full">1</span>
-                </div>
-                
-                <!-- hours -->
-            {% for i in calendar_config.hours %}
-                <div class="text-right pr-2  h-16 flex justify-center items-start">{{ i }}:00</div>
-                <div id="day1Hour{{ i }}" class="primary-light-border border transform hover:scale-110 transition-all"></div>
-                <div id="day2Hour{{ i }}" class="primary-light-border border transform hover:scale-110 transition-all"></div>
-                <div id="day3Hour{{ i }}" class="primary-light-border border transform hover:scale-110 transition-all"></div>
+            </div>
+            <div id="headerDay1"  class="sticky top-0 bg-bg z-10 text-center font-semibold primary-light-border border flex flex-col items-center gap-1 py-2">
+                <span class="weekDay">lun</span>
+                <span class="day p-1 rounded-full">1</span>
+            </div>
+            <div id="headerDay2"  class="sticky top-0 bg-bg z-10 text-center font-semibold primary-light-border border flex flex-col items-center gap-1 py-2">
+                <span class="weekDay">lun</span>
+                <span class="day p-1 rounded-full">1</span>
+            </div>
+            <div id="headerDay3"  class="sticky top-0 bg-bg z-10 text-center font-semibold primary-light-border border flex flex-col items-center gap-1 py-2">
+                <span class="weekDay">lun</span>
+                <span class="day p-1 rounded-full">1</span>
+            </div>
+            
+            <!-- hours row -->
+            {% for i in "------------------------"|slice:":24" %}
+                <div class="text-right pr-2 h-16 flex justify-center items-start">{{ forloop.counter0 }}:00</div>
+
+                {% for i in "---"|slice:":3" %}
+                    <div id="day{{ forloop.counter }}Hour{{ forloop.parentloop.counter0 }}" 
+                    class=" transform p-1 flex flex-col gap-1
+                    
+                    hourBox "></div>
+                {% endfor %}
             {% endfor %}
 
-            </div>
+            <template id="miniHourBox">
+                <div class="primary-border border flex-1 hover:scale-110 transition-all transform ">
+                </div>
+            </template>
+            <template id="miniHourBoxBusy">
+                <div class="primary-bg bg-color secondary-border border flex-1 hover:scale-110 transition-all transform grid place-content-center h-4">
+                    busy
+                </div>
+            </template>
+
         </div>
     </main>
 </main>
@@ -92,23 +103,21 @@ primary-light-bg p-8 rounded-lg shadow-xl w-96 z-10
     </form>
 </dialog>
 
-<script>
-    // Lógica para mostrar/ocultar el modal
-    const addEventBtn = document.getElementById('addEventBtn');
-    const eventModal = document.getElementById('eventModal');
-    const closeModalBtn = document.getElementById('closeModalBtn');
 
-    addEventBtn.addEventListener('click', () => {
-        eventModal.showModal();
-    });
 
-    closeModalBtn.addEventListener('click', () => {
-        eventModal.close();
-    });
 
-</script>
+
+<template id="eventTemplate">
+    <div class="event primary-bg bg-color rounded-lg p-2 text-sm text-white">
+        <span class="eventTitle"></span>
+        <span class="eventTime"></span>
+    </div>
+</template>
+
+
 
 {{calendar_config|json_script:"calendar_config"}}
+{{appointments|json_script:"appointments"}}
 
 <script src="{% static "js/calendar.js" %}"></script>
 {% endblock content %}
