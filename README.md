@@ -4,7 +4,16 @@
 - migrate to postgres db
 - ~~add whatsbtn~~
 - ~~create date mer~~
-- create user scheduler page
+- ~~create user scheduler page~~
+- calendar crud for company admin 
+   - c 
+      - limit the hours the company admin can book an appointment
+   - r ead the appointments
+      - show the details in the modal
+   - u pdate the 
+      - take in account the restrictions
+   - d elete
+      - send an email to the user with a msg
 
 
 
