@@ -3,6 +3,10 @@ from core.logic.helpers.logic_helpers import company_from_request, send_gmail
 from core.logic.helpers.str_helpers import get_color_variations, get_company_name_from_url
 from core.models import Appointment, Product, Company
 from django.conf import settings
+from django.http import JsonResponse
+from django.utils.dateparse import parse_datetime
+from .models import Appointment, Company
+import json
 
 def home(request):
     company = company_from_request(request)
@@ -100,7 +104,6 @@ def calendar_view(request):
         "primary_color": get_color_variations(company.primary_color),
         "secondary_color": get_color_variations(company.secondary_color)
     }
-    print(appointments)
     
     
     return render(request, 'pages/calendar.html', {
@@ -150,3 +153,32 @@ def contact_through_mail(request):
 
 
 # functon routes
+
+def create_appointment(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        try:
+            company = Company.objects.get(id=data['company_id'])
+            start_datetime = parse_datetime(data['start_datetime'])
+            end_datetime = parse_datetime(data['end_datetime'])
+            appointment = Appointment.objects.create(
+                company=company,
+                start_datetime=start_datetime,
+                end_datetime=end_datetime,
+                full_name=data['full_name'],
+                email=data.get('email', ''),
+                phone_number=data.get('phone_number', ''),
+                message=data.get('message', '')
+            )
+            response = {
+                'status': 'success',
+                'appointment_id': appointment.id
+            }
+        except Exception as e:
+            response = {
+                'status': 'error',
+                'message': str(e)
+            }
+        return JsonResponse(response)
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)

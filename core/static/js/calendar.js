@@ -1,3 +1,7 @@
+import { myFetch,showAlert } from "./helpers.js";
+
+
+
 // Constants
 const DAYS_OF_WEEK = ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'];
 const MONTHS_OF_YEAR = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
@@ -32,9 +36,10 @@ const prevDaysBtn = document.getElementById('prevDaysBtn');
 const nextDaysBtn = document.getElementById('nextDaysBtn');
 
 // Modal Elements
-const addEventBtn = document.getElementById('addEventBtn');
-const eventModal = document.getElementById('eventModal');
-const closeModalBtn = document.getElementById('closeModalBtn');
+const eventModal = document.querySelector('#eventModal');
+const appointmentEditor = eventModal.querySelector('#appointmentEditor');
+const addEventBtn = document.querySelector('#addEventBtn');
+const closeModalBtn = appointmentEditor.querySelector('#closeModalBtn');
 
 // Current Date
 const currentDate = new Date();
@@ -59,7 +64,6 @@ function main() {
     syncMiniBoxesToHours();
     syncDataOnCalendar(dataOnCalendar);
     addEventListeners();
-    addModalEventListeners();
 }
 
 function syncMiniBoxesToHours() {
@@ -69,9 +73,14 @@ function syncMiniBoxesToHours() {
     const template = document.getElementById('miniHourBox').content;
     const template2 = document.getElementById('miniHourBoxBusy').content;
 
+
+    console.log(appointments);
+    
     hourBoxes.forEach((hourBox) => {
         hourBox.innerHTML = ""; // clear the hourBox
         for (let i = 0; i < amountOfMiniBoxes; i++) {
+            
+
             const hour = parseInt(hourBox.id.split('Hour')[1]);
             const dayIndex = parseInt(hourBox.id.split('Hour')[0].split('day')[1])-1;
             const day = parseInt(headers[dayIndex].querySelector('.day').textContent);
@@ -82,36 +91,38 @@ function syncMiniBoxesToHours() {
                 day: day,
                 month: dataOnCalendar.month,
                 year: dataOnCalendar.year,
-                startMinute: hour * 60,
-                endMinute: hour * 60 + durationInMinutes 
+                startMinute: hour * 60 + (i * durationInMinutes),
+                endMinute: hour * 60 + (i * durationInMinutes) + durationInMinutes
             };
+            
             const boxPseudoId = `${miniBoxData.year}-${String(miniBoxData.month + 1).padStart(2, '0')}-${String(miniBoxData.day).padStart(2, '0')}-${miniBoxData.startMinute}-${miniBoxData.endMinute}`;
+            // returns something like 2021-08-01-480-540
+            // where 480 is 8:00 and 540 is 9:00
 
             
-            // check if the hour is in the appointments
+            // get all the appointments that, has the startMinute or endMinute between the startMinute and endMinute of the miniBox
             const existingAppointment = appointments.find(appointment => {
-                const [year, month, day] = appointment.pseudoId.split('-');
-                const [boxYear, boxMonth, boxDay] = boxPseudoId.split('-');
-                return year === boxYear && month === boxMonth && day === boxDay;
-            });
-            const appointmentExits = () => {
-                // if the appointment contains the hour
-                if (existingAppointment) {
-                    const start = existingAppointment.start_datetime.getUTCHours() * 60 + existingAppointment.start_datetime.getMinutes();
-                    const end = existingAppointment.end_datetime.getUTCHours() * 60 + existingAppointment.end_datetime.getMinutes();
-                    return start <= miniBoxData.startMinute && end >= miniBoxData.endMinute;
+                // verify if the appointment is in the same day
+                if (appointment.start_datetime.getDate() !== miniBoxData.day) {
+                    return false;
                 }
-            }
+                return  (appointment.start_datetime.getUTCHours() * 60 + appointment.start_datetime.getMinutes() < miniBoxData.endMinute &&
+                    appointment.end_datetime.getUTCHours() * 60 + appointment.end_datetime.getMinutes() > miniBoxData.startMinute);
+            });
             
-
             // Clonar el contenido del template
-            const miniBox = document.importNode(!!appointmentExits()? template2 : template, true).firstElementChild;
+            const miniBox = document.importNode(!!existingAppointment? template2 : template, true).firstElementChild;
+            miniBox.setAttribute('data-info', JSON.stringify(miniBoxData));
+            
+            if (existingAppointment) {
+                miniBox.addEventListener('click', () => { setAppointmentDataInEditor(existingAppointment); eventModal.show(); });
+            }
+            hourBox.appendChild(miniBox);
+
             
 
-            // Modificar el contenido clonado
-            
-            miniBox.setAttribute('data-info', JSON.stringify(miniBoxData));
-            hourBox.appendChild(miniBox);
+                
+
         }
     });
 }
@@ -163,6 +174,52 @@ function subtractDays(days = 1, data = dataOnCalendar) {
     return addDays(-days, data);
 }
 
+
+function updateCalendar(days) {
+    const newDate = days > 0 ? addDays(days) : subtractDays(-days);
+    Object.assign(dataOnCalendar, newDate);
+    syncDataOnCalendar(dataOnCalendar);
+}
+
+const handleAppointmentSubmission = async (event) => {
+    event.preventDefault();
+    const appointmentForm = event.target;
+
+    const formData = new FormData(appointmentForm);
+    const data = Object.fromEntries(formData.entries());
+
+    // Verificar que todos los campos requeridos estén completos
+    if (!data.full_name || !data.start_datetime || !data.end_datetime) {
+        showAlert('error', 'Por favor, complete todos los campos requeridos.');
+        return;
+    }
+
+    try {
+        const response = await myFetch('/create-appointment/', data);
+        if (response.status === 'success') {
+            showAlert('success', '¡Cita creada exitosamente!');
+            appointmentForm.reset(); // Limpiar el formulario después de la creación exitosa
+        } else {
+            showAlert('error', `Error: ${response.message}`);
+        }
+    } catch (error) {
+        showAlert('error', 'Ocurrió un error al crear la cita.');
+    }
+};
+
+function addModalEventListeners() {
+    addEventBtn.addEventListener('click', () => {
+        eventModal.show();
+    });
+
+    closeModalBtn.addEventListener('click', () => {
+        eventModal.close();
+    });
+
+    
+    appointmentEditor.addEventListener('submit', handleAppointmentSubmission);
+}
+
 function addEventListeners() {
     prevDaysBtn.addEventListener('click', () => {
         updateCalendar(-1);
@@ -171,22 +228,48 @@ function addEventListeners() {
     nextDaysBtn.addEventListener('click', () => {
         updateCalendar(1);
     });
+
+    addModalEventListeners();
 }
 
-function updateCalendar(days) {
-    const newDate = days > 0 ? addDays(days) : subtractDays(-days);
-    Object.assign(dataOnCalendar, newDate);
-    syncDataOnCalendar(dataOnCalendar);
-}
+function setAppointmentDataInEditor(appointmentData) {
+    // {
+    //     "id": 3,
+    //     "company_id": 1,
+    //     "start_datetime": "2024-10-22T18:00:00.000Z",
+    //     "end_datetime": "2024-10-22T18:30:00.000Z",
+    //     "full_name": "Juan Jose Huertas",
+    //     "email": "jjhuertasbotache@gmail.com",
+    //     "phone_number": "3012167977",
+    //     "message": "me gustaria una cita para mis dientes",
+    //     "pseudoId": "2024-10-22-1080-1110"
+    // }
 
-function addModalEventListeners() {
-    addEventBtn.addEventListener('click', () => {
-        eventModal.showModal();
-    });
+    let data;
+    if (appointmentData) {
+        data = appointmentData;
+        // fill the form
+        appointmentEditor.full_name.value = data.full_name;
+        appointmentEditor.email.value = data.email;
+        appointmentEditor.phone_number.value = data.phone_number;
+        appointmentEditor.message.value = data.message;
+        appointmentEditor.start_datetime.value = data.start_datetime.toISOString().slice(0, 16);
+        appointmentEditor.end_datetime.value = data.end_datetime.toISOString().slice(0, 16);
+        
+    } else {
+        data = {
+            id: null,
+            start_datetime: undefined,
+            end_datetime: undefined,
+            full_name: '',
+            email: '',
+            phone_number: '',
+            message: "",
+        };
+        // reset the form
+        appointmentEditor.reset();
+    }
 
-    closeModalBtn.addEventListener('click', () => {
-        eventModal.close();
-    });
 }
 
 // Initialize

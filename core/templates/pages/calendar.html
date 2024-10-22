@@ -54,7 +54,7 @@
             
             <!-- hours row -->
             {% for i in "------------------------"|slice:":24" %}
-                <div class="text-right pr-2 h-16 flex justify-center items-start">{{ forloop.counter0 }}:00</div>
+                <div class="text-right pr-2 h-16 flex justify-center items-start  ">{{ forloop.counter0 }}:00</div>
 
                 {% for i in "---"|slice:":3" %}
                     <div id="day{{ forloop.counter }}Hour{{ forloop.parentloop.counter0 }}" 
@@ -62,14 +62,17 @@
                     
                     hourBox "></div>
                 {% endfor %}
+
+                <hr class="primary-border border col-span-4 opacity-5">
             {% endfor %}
 
+            {% comment %} templates for the mini boxes {% endcomment %}
             <template id="miniHourBox">
-                <div class="primary-border border flex-1 hover:scale-110 transition-all transform a">
+                <div class="primary-border border flex-1 hover:scale-105 transition-all transform ">
                 </div>
             </template>
             <template id="miniHourBoxBusy">
-                <div class="primary-bg bg-color secondary-border border flex-1 hover:scale-110 transition-all transform grid place-content-center h-4">
+                <div class="primary-bg bg-color secondary-border border flex-1 hover:scale-105 transition-all transform grid place-content-center h-4 text-xs">
                     busy
                 </div>
             </template>
@@ -79,45 +82,52 @@
 </main>
 
 <!-- Modal para agregar evento -->
-<dialog id="eventModal" class="
-primary-light-bg p-8 rounded-lg shadow-xl w-96 z-10
-">
+<dialog id="eventModal" class="secondary-light-bg text-color p-8 rounded-lg shadow-xl w-96 max-w-md z-30 overflow-y-auto inset-0 ">
     <h2 class="text-2xl font-bold mb-4">Agregar Evento</h2>
-    <form method="dialog">
+    <form id="appointmentEditor">
+        <input type="hidden" id="eventId" name="event_id">
         <div class="mb-4">
-            <label for="eventTitle" class="block text-gray-700 text-sm font-bold mb-2">Título</label>
-            <input type="text" id="eventTitle" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            <label for="fullName" class="block text-sm font-bold mb-2">Nombre Completo</label>
+            <input type="text" id="fullName" name="full_name" class="text-bg bg-bg shadow-md appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" required>
         </div>
         <div class="mb-4">
-            <label for="eventDate" class="block text-gray-700 text-sm font-bold mb-2">Fecha</label>
-            <input type="date" id="eventDate" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            <label for="email" class="block text-sm font-bold mb-2">Correo Electrónico</label>
+            <input type="email" id="email" name="email" class="text-bg bg-bg shadow-md appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline">
         </div>
         <div class="mb-4">
-            <label for="eventTime" class="block text-gray-700 text-sm font-bold mb-2">Hora</label>
-            <input type="time" id="eventTime" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            <label for="phoneNumber" class="block text-sm font-bold mb-2">Número de Teléfono</label>
+            <input type="text" id="phoneNumber" name="phone_number" class="text-bg bg-bg shadow-md appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+        <div class="mb-4">
+            <label for="startDatetime" class="block text-sm font-bold mb-2">Fecha y Hora de Inicio</label>
+            <input type="datetime-local" id="startDatetime" name="start_datetime" class="text-bg bg-bg shadow-md appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" required>
+        </div>
+        <div class="mb-4">
+            <label for="endDatetime" class="block text-sm font-bold mb-2">Fecha y Hora de Fin</label>
+            <input type="datetime-local" id="endDatetime" name="end_datetime" class="text-bg bg-bg shadow-md appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" required>
+        </div>
+        <div class="mb-4">
+            <label for="message" class="block text-sm font-bold mb-2">Mensaje</label>
+            <textarea id="message" name="message" class="text-bg bg-bg shadow-md appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"></textarea>
         </div>
         <div class="flex items-center justify-between">
-            <button type="submit" class="bg-primary hover:bg-primary-dark text-bg font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Guardar</button>
-            <button type="button" id="closeModalBtn" class="bg-gray-300 hover:bg-gray-400 primary-color font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Cancelar</button>
+            <button type="submit" class="primary-bg bg-color hover:bg-primary-dark text-bg font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Guardar</button>
+            <button type="button" id="closeModalBtn" class=" text-color border text-border font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Cancelar</button>
         </div>
     </form>
 </dialog>
+<div class="modalBackdrop"></div>
 
 
 
 
 
-<template id="eventTemplate">
-    <div class="event primary-bg bg-color rounded-lg p-2 text-sm text-white">
-        <span class="eventTitle"></span>
-        <span class="eventTime"></span>
-    </div>
-</template>
 
 
 
 {{calendar_config|json_script:"calendar_config"}}
 {{appointments|json_script:"appointments"}}
 
-<script src="{% static "js/calendar.js" %}"></script>
+<script type="module" src="{% static "js/helpers.js" %}"></script>
+<script type="module" src="{% static "js/calendar.js" %}"></script>
 {% endblock content %}

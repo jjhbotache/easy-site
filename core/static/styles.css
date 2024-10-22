@@ -76,9 +76,22 @@ html:not(.dark) .bg-border{border-color: var(--bg) !important;}
 
 /* global */
 /* add styles to all hover btns */
-dialog:-internal-dialog-in-top-layer::backdrop {
-    background-color: rgba(0, 0, 0, .8) !important;
+dialog::backdrop,
+dialog[open] + .modalBackdrop {
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10;
+    
 }
+.modalBackdrop {
+    display: none;
+}
+
 button:not([id]):hover,
 a:not([id]):hover {
     transform: scale(1.01);

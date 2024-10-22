@@ -46,10 +46,6 @@ class CompanyAdmin(admin.ModelAdmin):
         
 
 class AppointmentAdmin(admin.ModelAdmin):
-    # def get_list_display(self, request):
-    #     if request.user.is_superuser:
-    #         return ('company', 'start_datetime', 'end_datetime', 'full_name')
-    #     return ('start_datetime', 'end_datetime', 'full_name')
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)

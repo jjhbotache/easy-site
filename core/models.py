@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.hashers import make_password
 from django.core.validators import FileExtensionValidator, EmailValidator, RegexValidator
 from django.db import models
+from django.forms import DateTimeField
 
 class User(AbstractUser):
   is_company_admin = models.BooleanField(default=True)
@@ -65,6 +66,7 @@ class Appointment(models.Model):
         null=True, 
         validators=[RegexValidator(regex=r'^\d{10,15}$', message="Enter a valid phone number.")]
     )
+    message = models.TextField(blank=True, null=True)
     
     def __str__(self):
-        return f"{self.full_name} ( {self.start_datetime} - {self.end_datetime} )"
+        return f"{self.full_name} {self.start_datetime.strftime('%d/%m/%Y %H:%M')} - {self.end_datetime.strftime('%H:%M %d/%m/%Y ')}"
