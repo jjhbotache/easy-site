@@ -111,7 +111,10 @@ def calendar_view(request):
         "company": company,
         "colors": colors,
         "calendar_config": {
-            "appointment_duration": .25 #1 - .5 - .25
+            "appointment_duration": .25, #1 - .5 - .25 TODO: make this dynamic
+            "appointment_start_time": 8,
+            "appointment_end_time": 20,
+            "off_hours": [12, 13],
         }
     })
     

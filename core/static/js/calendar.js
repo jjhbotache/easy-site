@@ -8,6 +8,8 @@ const MONTHS_OF_YEAR = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', '
 
 // Elements
 const calendar_config = JSON.parse(document.getElementById('calendar_config').textContent);
+console.log(calendar_config);
+
 const appointments = JSON.parse(document.getElementById('appointments').textContent, (key, value) => {
     if (key === 'start_datetime' || key === 'end_datetime') {
         return new Date(value);
@@ -64,6 +66,9 @@ function main() {
     syncMiniBoxesToHours();
     syncDataOnCalendar(dataOnCalendar);
     addEventListeners();
+
+    document.querySelector('footer')?.remove();
+    document.querySelector('#footerSvg')?.remove();
 }
 
 function syncMiniBoxesToHours() {
@@ -71,18 +76,15 @@ function syncMiniBoxesToHours() {
     const durationInMinutes = calendar_config.appointment_duration * 60;
     const amountOfMiniBoxes = Math.floor(1 / calendar_config.appointment_duration);
     const template = document.getElementById('miniHourBox').content;
-    const template2 = document.getElementById('miniHourBoxBusy').content;
+    const templateBusy = document.getElementById('miniHourBoxBusy').content;
+    const templateOff = document.getElementById('miniHourBoxOff').content;
 
-
-    console.log(appointments);
-    
     hourBoxes.forEach((hourBox) => {
-        hourBox.innerHTML = ""; // clear the hourBox
-        for (let i = 0; i < amountOfMiniBoxes; i++) {
-            
+        const hour = parseInt(hourBox.id.split('Hour')[1]);
 
-            const hour = parseInt(hourBox.id.split('Hour')[1]);
-            const dayIndex = parseInt(hourBox.id.split('Hour')[0].split('day')[1])-1;
+        hourBox.innerHTML = ""; // Limpiar el hourBox
+        for (let i = 0; i < amountOfMiniBoxes; i++) {
+            const dayIndex = parseInt(hourBox.id.split('Hour')[0].split('day')[1]) - 1;
             const day = parseInt(headers[dayIndex].querySelector('.day').textContent);
 
             const miniBoxData = {
@@ -94,35 +96,35 @@ function syncMiniBoxesToHours() {
                 startMinute: hour * 60 + (i * durationInMinutes),
                 endMinute: hour * 60 + (i * durationInMinutes) + durationInMinutes
             };
-            
-            const boxPseudoId = `${miniBoxData.year}-${String(miniBoxData.month + 1).padStart(2, '0')}-${String(miniBoxData.day).padStart(2, '0')}-${miniBoxData.startMinute}-${miniBoxData.endMinute}`;
-            // returns something like 2021-08-01-480-540
-            // where 480 is 8:00 and 540 is 9:00
 
-            
-            // get all the appointments that, has the startMinute or endMinute between the startMinute and endMinute of the miniBox
+            const boxPseudoId = `${miniBoxData.year}-${String(miniBoxData.month + 1).padStart(2, '0')}-${String(miniBoxData.day).padStart(2, '0')}-${miniBoxData.startMinute}-${miniBoxData.endMinute}`;
+
+            // Verificar si la hora está fuera del rango permitido o en las horas de descanso
+            const isOffTime = hour < calendar_config.appointment_start_time || hour >= calendar_config.appointment_end_time || calendar_config.off_hours.includes(hour);
+
+            // Obtener todas las citas que tienen el startMinute o endMinute entre el startMinute y endMinute de la miniBox
             const existingAppointment = appointments.find(appointment => {
-                // verify if the appointment is in the same day
+                // Verificar si la cita está en el mismo día
                 if (appointment.start_datetime.getDate() !== miniBoxData.day) {
                     return false;
                 }
-                return  (appointment.start_datetime.getUTCHours() * 60 + appointment.start_datetime.getMinutes() < miniBoxData.endMinute &&
+                return (appointment.start_datetime.getUTCHours() * 60 + appointment.start_datetime.getMinutes() < miniBoxData.endMinute &&
                     appointment.end_datetime.getUTCHours() * 60 + appointment.end_datetime.getMinutes() > miniBoxData.startMinute);
             });
-            
-            // Clonar el contenido del template
-            const miniBox = document.importNode(!!existingAppointment? template2 : template, true).firstElementChild;
-            miniBox.setAttribute('data-info', JSON.stringify(miniBoxData));
-            
-            if (existingAppointment) {
+
+            // Clonar el contenido del template correspondiente
+            let miniBox;
+            if (isOffTime) {
+                miniBox = document.importNode(templateOff, true).firstElementChild;
+            } else if (existingAppointment) {
+                miniBox = document.importNode(templateBusy, true).firstElementChild;
                 miniBox.addEventListener('click', () => { setAppointmentDataInEditor(existingAppointment); eventModal.show(); });
+            } else {
+                miniBox = document.importNode(template, true).firstElementChild;
             }
+
+            miniBox.setAttribute('data-info', JSON.stringify(miniBoxData));
             hourBox.appendChild(miniBox);
-
-            
-
-                
-
         }
     });
 }

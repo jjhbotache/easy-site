@@ -7,17 +7,18 @@
 {% endblock %}
 
 {% block content %}
-<main class="flex flex-col bg-bg h-5/6 shadow-2xl">
+
+<main class="flex h-full flex-col bg-bg shadow-2xl">
     <!-- Encabezado -->
-    <header class="bg-bg shadow-md p-4">
-        <div class="flex justify-between items-center">
+    <header class="bg-bg shadow-md p-4 h-auto">
+        <div class="flex justify-between items-end">
             <h1 class="text-2xl font-bold primary-dark-color flex flex-col items-start">
                 Calendario de citas
                 <div class="text-center font-bold text-xl py-2">
                     <span id="month">Enero</span>- <span id="year">2000</span> 
                 </div>
             </h1>
-            <button id="addEventBtn" class="p-2  primary-bg bg-color rounded-lg  flex items-center justify-evenly gap-1 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 ">
+            <button id="addEventBtn" class="p-2 justify-self-end primary-bg bg-color rounded-lg  flex items-center justify-evenly gap-1 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 ">
                 <i class="fi fi-rr-plus"></i>
                 Agendar cita
             </button>
@@ -26,7 +27,7 @@
     </header>
 
     <!-- Contenido principal -->
-    <main class="flex-grow overflow-y-scroll scroll-hide">
+    <main class=" overflow-y-scroll scroll-hide">
         <div id="calendar" class="grid grid-cols-4 gap-1 bg-bg p-4 pt-0" >
             <!-- firsts rows -->
             <div class="sticky top-0 bg-bg z-10">
@@ -76,10 +77,17 @@
                     busy
                 </div>
             </template>
+            
+            <template id="miniHourBoxOff">
+                <div class="primary-bg bg-color secondary-border border-dashed flex-1 cursor-not-allowed grid place-content-center h-4 text-xs opacity-10">
+                    off
+                </div>
+            </template>
 
         </div>
     </main>
 </main>
+
 
 <!-- Modal para agregar evento -->
 <dialog id="eventModal" class="secondary-light-bg text-color p-8 rounded-lg shadow-xl  z-30 overflow-y-auto inset-0 w-full max-w-screen-sm fixed ">
