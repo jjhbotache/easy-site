@@ -10,7 +10,7 @@
       - limit the hours the company admin can book an appointment
    - r ead the appointments
       - ~~show the details in the modal~~
-      - use the configs
+      - ~~use the configs~~
    - u pdate the 
       - take in account the restrictions
    - d elete

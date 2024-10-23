@@ -1,13 +1,8 @@
-import { myFetch,showAlert } from "./helpers.js";
-
-
-
-// Constants
-const DAYS_OF_WEEK = ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'];
-const MONTHS_OF_YEAR = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+import { myFetch, showAlert, DAYS_OF_WEEK, MONTHS_OF_YEAR, addDays, subtractDays } from "./helpers.js";
 
 // Elements
 const calendar_config = JSON.parse(document.getElementById('calendar_config').textContent);
+
 console.log(calendar_config);
 
 const appointments = JSON.parse(document.getElementById('appointments').textContent, (key, value) => {
@@ -26,8 +21,6 @@ appointments.forEach(appointment => {
     const pseudoId = `${start.getFullYear()}-${String(start.getMonth() + 1).padStart(2, '0')}-${String(start.getDate()).padStart(2, '0')}-${startMinutes}-${endMinutes}`;
     appointment.pseudoId = pseudoId;
 });
-// console.log(appointments);
-
 
 const calendar = document.querySelector('#calendar');
 const headerDay1 = document.querySelector('#headerDay1');
@@ -67,62 +60,65 @@ function main() {
     syncDataOnCalendar(dataOnCalendar);
     addEventListeners();
 
-    document.querySelector('footer')?.remove();
-    document.querySelector('#footerSvg')?.remove();
+    document.querySelector('#footerSecction')?.remove();
 }
 
 function syncMiniBoxesToHours() {
     const hourBoxes = document.querySelectorAll('.hourBox');
     const durationInMinutes = calendar_config.appointment_duration * 60;
     const amountOfMiniBoxes = Math.floor(1 / calendar_config.appointment_duration);
+    
     const template = document.getElementById('miniHourBox').content;
     const templateBusy = document.getElementById('miniHourBoxBusy').content;
     const templateOff = document.getElementById('miniHourBoxOff').content;
-
     hourBoxes.forEach((hourBox) => {
-        const hour = parseInt(hourBox.id.split('Hour')[1]);
-
+        const [dayPart, hourPart] = hourBox.id.split('Hour');
+        const hour = parseInt(hourPart);
+        const dayIndex = parseInt(dayPart.split('day')[1]) - 1;
+        const day = parseInt(headers[dayIndex].querySelector('.day').textContent);
+        const dayOfWeek = (new Date(dataOnCalendar.year, dataOnCalendar.month, day).getDay() + 6) % 7 + 1; // Ajustar para que empiece desde lunes
+    
         hourBox.innerHTML = ""; // Limpiar el hourBox
+    
+        const isOffTime = hour < calendar_config.appointment_start_time || hour >= calendar_config.appointment_end_time || calendar_config.off_hours.includes(hour);
+        
+        
+        const isOffDay = calendar_config.off_days_of_the_week.includes(dayOfWeek);
+    
         for (let i = 0; i < amountOfMiniBoxes; i++) {
-            const dayIndex = parseInt(hourBox.id.split('Hour')[0].split('day')[1]) - 1;
-            const day = parseInt(headers[dayIndex].querySelector('.day').textContent);
-
+            const startMinute = hour * 60 + (i * durationInMinutes);
+            const endMinute = startMinute + durationInMinutes;
+    
             const miniBoxData = {
                 hour: hour,
                 hourIndex: i,
                 day: day,
+                weekDay: dayOfWeek,
                 month: dataOnCalendar.month,
                 year: dataOnCalendar.year,
-                startMinute: hour * 60 + (i * durationInMinutes),
-                endMinute: hour * 60 + (i * durationInMinutes) + durationInMinutes
+                startMinute: startMinute,
+                endMinute: endMinute
             };
-
-            const boxPseudoId = `${miniBoxData.year}-${String(miniBoxData.month + 1).padStart(2, '0')}-${String(miniBoxData.day).padStart(2, '0')}-${miniBoxData.startMinute}-${miniBoxData.endMinute}`;
-
-            // Verificar si la hora está fuera del rango permitido o en las horas de descanso
-            const isOffTime = hour < calendar_config.appointment_start_time || hour >= calendar_config.appointment_end_time || calendar_config.off_hours.includes(hour);
-
-            // Obtener todas las citas que tienen el startMinute o endMinute entre el startMinute y endMinute de la miniBox
-            const existingAppointment = appointments.find(appointment => {
-                // Verificar si la cita está en el mismo día
-                if (appointment.start_datetime.getDate() !== miniBoxData.day) {
-                    return false;
-                }
-                return (appointment.start_datetime.getUTCHours() * 60 + appointment.start_datetime.getMinutes() < miniBoxData.endMinute &&
-                    appointment.end_datetime.getUTCHours() * 60 + appointment.end_datetime.getMinutes() > miniBoxData.startMinute);
-            });
-
-            // Clonar el contenido del template correspondiente
+    
+            const existingAppointment = appointments.find(appointment => 
+                appointment.start_datetime.getDate() === miniBoxData.day &&
+                appointment.start_datetime.getUTCHours() * 60 + appointment.start_datetime.getMinutes() < miniBoxData.endMinute &&
+                appointment.end_datetime.getUTCHours() * 60 + appointment.end_datetime.getMinutes() > miniBoxData.startMinute
+            );
+    
             let miniBox;
-            if (isOffTime) {
+            if (isOffTime || isOffDay) {
                 miniBox = document.importNode(templateOff, true).firstElementChild;
             } else if (existingAppointment) {
                 miniBox = document.importNode(templateBusy, true).firstElementChild;
-                miniBox.addEventListener('click', () => { setAppointmentDataInEditor(existingAppointment); eventModal.show(); });
+                miniBox.addEventListener('click', () => { 
+                    setAppointmentDataInEditor(existingAppointment); 
+                    eventModal.show(); 
+                });
             } else {
                 miniBox = document.importNode(template, true).firstElementChild;
             }
-
+    
             miniBox.setAttribute('data-info', JSON.stringify(miniBoxData));
             hourBox.appendChild(miniBox);
         }
@@ -160,25 +156,8 @@ function updateHeaderContent(dayElement, weekDayElement, newDate) {
     weekDayElement.textContent = DAYS_OF_WEEK[newDate.dayOfWeek];
 }
 
-function addDays(days = 1, data = dataOnCalendar) {
-    const date = new Date(data.year, data.month, data.day);
-    date.setDate(date.getDate() + days);
-
-    return {
-        day: date.getDate(),
-        month: date.getMonth(),
-        year: date.getFullYear(),
-        dayOfWeek: date.getDay()
-    };
-}
-
-function subtractDays(days = 1, data = dataOnCalendar) {
-    return addDays(-days, data);
-}
-
-
 function updateCalendar(days) {
-    const newDate = days > 0 ? addDays(days) : subtractDays(-days);
+    const newDate = days > 0 ? addDays(days, dataOnCalendar) : subtractDays(-days, dataOnCalendar);
     Object.assign(dataOnCalendar, newDate);
     syncDataOnCalendar(dataOnCalendar);
 }
@@ -218,7 +197,6 @@ function addModalEventListeners() {
         eventModal.close();
     });
 
-    
     appointmentEditor.addEventListener('submit', handleAppointmentSubmission);
 }
 
@@ -235,18 +213,6 @@ function addEventListeners() {
 }
 
 function setAppointmentDataInEditor(appointmentData) {
-    // {
-    //     "id": 3,
-    //     "company_id": 1,
-    //     "start_datetime": "2024-10-22T18:00:00.000Z",
-    //     "end_datetime": "2024-10-22T18:30:00.000Z",
-    //     "full_name": "Juan Jose Huertas",
-    //     "email": "jjhuertasbotache@gmail.com",
-    //     "phone_number": "3012167977",
-    //     "message": "me gustaria una cita para mis dientes",
-    //     "pseudoId": "2024-10-22-1080-1110"
-    // }
-
     let data;
     if (appointmentData) {
         data = appointmentData;
@@ -271,7 +237,6 @@ function setAppointmentDataInEditor(appointmentData) {
         // reset the form
         appointmentEditor.reset();
     }
-
 }
 
 // Initialize

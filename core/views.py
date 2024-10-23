@@ -95,9 +95,8 @@ def product_detail(request, product_id):
     })
 
 def calendar_view(request):
-    appointments = Appointment.objects.all()
-    appointments = list(Appointment.objects.all().values())
     company = company_from_request(request)
+    appointments = list(Appointment.objects.filter(company=company).values())
     colors = {
         "background_color": company.background_color,
         "text_color": company.text_color,
@@ -105,17 +104,19 @@ def calendar_view(request):
         "secondary_color": get_color_variations(company.secondary_color)
     }
     
+    calendar_config = {
+        "appointment_duration": company.appointment_duration,
+        "appointment_start_time": company.appointment_start_time,
+        "appointment_end_time": company.appointment_end_time,
+        "off_hours": company.off_hours,
+        "off_days_of_the_week": company.off_days_of_the_week
+    }
     
     return render(request, 'pages/calendar.html', {
         'appointments': appointments,
         "company": company,
         "colors": colors,
-        "calendar_config": {
-            "appointment_duration": .25, #1 - .5 - .25 TODO: make this dynamic
-            "appointment_start_time": 8,
-            "appointment_end_time": 20,
-            "off_hours": [12, 13],
-        }
+        "calendar_config": calendar_config
     })
     
 def contact_through_mail(request):

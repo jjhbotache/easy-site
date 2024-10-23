@@ -1,6 +1,6 @@
 // helpers.js
 
-function getCookie(name) {
+export function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
         const cookies = document.cookie.split(';');
@@ -30,7 +30,6 @@ export async function myFetch(url = '', data = {}, method = 'POST') {
   .then(response => response.json()) // Respuesta en formato JSON
   .catch(error => console.error('Error:', error));
 }
-
 
 /**
  * 
@@ -68,4 +67,23 @@ export function showAlert(type = "warning", message) {
       },
       onClick: function(){} // Callback after click
   }).showToast();
+}
+
+export const DAYS_OF_WEEK = ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'];
+export const MONTHS_OF_YEAR = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+export function addDays(days = 1, data) {
+    const date = new Date(data.year, data.month, data.day);
+    date.setDate(date.getDate() + days);
+
+    return {
+        day: date.getDate(),
+        month: date.getMonth(),
+        year: date.getFullYear(),
+        dayOfWeek: date.getDay()
+    };
+}
+
+export function subtractDays(days = 1, data) {
+    return addDays(-days, data);
 }
