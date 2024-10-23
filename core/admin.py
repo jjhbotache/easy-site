@@ -26,23 +26,29 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 class CompanyAdmin(admin.ModelAdmin):
-    
+
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         if request.user.is_superuser:  # Si es superusuario, ve todo
             return qs
-        return qs.filter(name=request.user.company)  # Solo productos de su empresa
-    
+        return qs.filter(name=request.user.company)  # Solo su empresa
+
     def save_model(self, request, obj, form, change):
         if not request.user.is_superuser:
             obj.id = request.user.company.id
         super().save_model(request, obj, form, change)
-        
+
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
         if not request.user.is_superuser:
             form.base_fields.pop('id', None)
+            form.base_fields.pop('owner', None)  # Remover el campo 'owner'
         return form
+
+    def get_readonly_fields(self, request, obj=None):
+        if not request.user.is_superuser:
+            return ['owner']  # Hacer el campo 'owner' de solo lectura
+        return super().get_readonly_fields(request, obj)
         
 
 class AppointmentAdmin(admin.ModelAdmin):
