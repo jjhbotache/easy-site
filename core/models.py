@@ -1,8 +1,9 @@
+import datetime
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.hashers import make_password
 from django.core.validators import FileExtensionValidator, EmailValidator, RegexValidator
 from django.db import models
-from django.forms import DateTimeField
+from django.forms import DateTimeField, ValidationError
 
 class User(AbstractUser):
   is_company_admin = models.BooleanField(default=True)
@@ -13,6 +14,9 @@ class User(AbstractUser):
       self.password = make_password(self.password)
       super().save(*args, **kwargs)
 
+
+def default_off_hours():return [12, 13, 14]
+def default_off_days_of_the_week(): return [7, 1]
 class Company(models.Model):
     name = models.CharField(max_length=255)
     company_description = models.TextField(blank=True, null=True)
@@ -44,8 +48,8 @@ class Company(models.Model):
     )
     appointment_start_time = models.IntegerField(default=8, help_text="Start time for appointments (e.g., 8 for 8 AM)")
     appointment_end_time = models.IntegerField(default=20, help_text="End time for appointments (e.g., 20 for 8 PM)")
-    off_hours = models.JSONField(default=[12, 13, 14], help_text="List of off hours (e.g., [12, 13, 14] for 12 PM, 1 PM, and 2 PM)")
-    off_days_of_the_week = models.JSONField(default=[7,1], help_text="List of off days of the week (e.g., [7, 1] for Sunday and Saturday)")
+    off_hours = models.JSONField(default=default_off_hours, help_text="List of off hours (e.g., [12, 13, 14] for 12 PM, 1 PM, and 2 PM)")
+    off_days_of_the_week = models.JSONField(default=default_off_days_of_the_week, help_text="List of off days of the week (e.g., [7, 1] for Sunday and Saturday)")
 
     owner = models.OneToOneField('core.User', on_delete=models.CASCADE, related_name='company')
     
@@ -83,3 +87,42 @@ class Appointment(models.Model):
     
     def __str__(self):
         return f"{self.full_name} {self.start_datetime.strftime('%d/%m/%Y %H:%M')} - {self.end_datetime.strftime('%H:%M %d/%m/%Y ')}"
+    
+    def clean(self):
+        # Validar que la cita no esté en un día de descanso
+        day_of_week = self.start_datetime.weekday() + 1  # Monday is 0 in Python, so add 1 to match the model's convention
+        if day_of_week in self.company.off_days_of_the_week:
+            raise ValidationError(f"No se pueden agendar citas los días {day_of_week}.")
+
+        # Validar que la cita no esté en una hora de descanso
+        start_hour = self.start_datetime.hour
+        end_hour = self.end_datetime.hour
+        if start_hour in self.company.off_hours or end_hour in self.company.off_hours:
+            raise ValidationError("No se pueden agendar citas en las horas de descanso.")
+        
+        # Validar que la cita no esté en el pasado
+        if self.start_datetime < datetime.datetime.now():
+            raise ValidationError("No se pueden agendar citas en el pasado.")
+
+        # Validar que la cita termine después de que empieza
+        if self.end_datetime <= self.start_datetime:
+            raise ValidationError("La cita debe terminar después de que empieza.")
+
+        # Validar que la duración de la cita sea correcta
+        duration = (self.end_datetime - self.start_datetime).total_seconds() / 3600.0
+        if duration % self.company.appointment_duration != 0:
+            raise ValidationError(f"La duración de la cita debe ser de {self.company.appointment_duration} horas o un múltiplo de la misma.")
+
+
+        # Validar que la cita no se superponga con otra cita existente
+        overlapping_appointments = Appointment.objects.filter(
+            company=self.company,
+            start_datetime__lt=self.end_datetime,
+            end_datetime__gt=self.start_datetime
+        ).exclude(id=self.id)
+        if overlapping_appointments.exists():
+            raise ValidationError("La cita se superpone con otra cita existente.")
+
+    def save(self, *args, **kwargs):
+        self.full_clean()  # Llama a clean() y valida el modelo antes de guardar
+        super().save(*args, **kwargs)

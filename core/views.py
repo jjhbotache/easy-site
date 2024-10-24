@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404, redirect, render
+from core.logic.appointments_logic import create_appointment_logic, update_appointment_logic
 from core.logic.helpers.logic_helpers import company_from_request, send_gmail
 from core.logic.helpers.str_helpers import get_color_variations, get_company_name_from_url
 from core.models import Appointment, Product, Company
@@ -158,30 +159,34 @@ def contact_through_mail(request):
 
 # functon routes
 
+
 def create_appointment(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         try:
-            company = Company.objects.get(id=data['company_id'])
-            start_datetime = parse_datetime(data['start_datetime'])
-            end_datetime = parse_datetime(data['end_datetime'])
-            appointment = Appointment.objects.create(
-                company=company,
-                start_datetime=start_datetime,
-                end_datetime=end_datetime,
-                full_name=data['full_name'],
-                email=data.get('email', ''),
-                phone_number=data.get('phone_number', ''),
-                message=data.get('message', '')
-            )
-            response = {
-                'status': 'success',
-                'appointment_id': appointment.id
-            }
+            company = company_from_request(request)
+            response = create_appointment_logic(data, company)
         except Exception as e:
+            error_message = str(e)
+            if hasattr(e, 'message_dict'):
+                error_message = e.message_dict
             response = {
                 'status': 'error',
-                'message': str(e)
+                'message': error_message
+            }
+        return JsonResponse(response)
+    elif request.method == 'PUT':
+        data = json.loads(request.body)
+        try:
+            company = company_from_request(request)
+            response = update_appointment_logic(data, company)
+        except Exception as e:
+            error_message = str(e)
+            if hasattr(e, 'message_dict'):
+                error_message = e.message_dict
+            response = {
+                'status': 'error',
+                'message': error_message
             }
         return JsonResponse(response)
     else:

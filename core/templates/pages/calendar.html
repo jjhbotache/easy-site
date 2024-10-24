@@ -90,8 +90,8 @@
 
 
 <!-- Modal para agregar evento -->
-<dialog id="eventModal" class="secondary-light-bg text-color p-8 rounded-lg shadow-xl  z-30 overflow-y-auto inset-0 w-full max-w-screen-sm fixed ">
-    <h2 class="text-2xl font-bold mb-4">Agregar Evento</h2>
+<dialog id="eventModal" class="secondary-light-bg text-color p-8 rounded-lg shadow-xl  z-30 overflow-y-auto inset-0 w-full max-w-sm fixed ">
+    <h2 class="text-2xl font-bold mb-4" id="modalTitle">Agregar Evento</h2>
     <form id="appointmentEditor">
         <input type="hidden" id="eventId" name="event_id">
         <div class="mb-4">
@@ -121,11 +121,11 @@
         </div>
         <div class="flex items-center justify-between">
             <button type="submit" class="primary-bg bg-color hover:bg-primary-dark text-bg font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Guardar</button>
-            <button type="button" id="closeModalBtn" class=" text-color border text-border font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Cancelar</button>
+            <button type="button" id="closeModalBtn" class=" text-color border text-border font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Cerrar</button>
         </div>
     </form>
 </dialog>
-<div class="modalBackdrop"></div>
+<div class="modalBackdrop "></div>
 
 
 

@@ -18,17 +18,20 @@ export function getCookie(name) {
 
 const csrftoken = getCookie('csrftoken');
 
+
 export async function myFetch(url = '', data = {}, method = 'POST') {
-  return fetch(url, {
-    method: method, // Método de la solicitud
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRFToken': csrftoken  // Aquí incluimos el token CSRF
-    },
-    body: method === 'GET' ? null : JSON.stringify(data) // Datos a enviar
-  })
-  .then(response => response.json()) // Respuesta en formato JSON
-  .catch(error => console.error('Error:', error));
+    const firstSegment = window.location.pathname.split('/')[1];
+    const urlToFetch = window.location.origin + '/' + firstSegment + '/' + url;
+    return fetch(urlToFetch, {
+        method: method, // Método de la solicitud
+        headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken  // Aquí incluimos el token CSRF
+        },
+        body: method === 'GET' ? null : JSON.stringify(data) // Datos a enviar
+    })
+    .then(response => response.json()) // Respuesta en formato JSON
+    .catch(error => console.error('Error:', error));
 }
 
 /**
@@ -56,7 +59,7 @@ export function showAlert(type = "warning", message) {
 
   Toastify({
       text: message,
-      duration: 6000,
+      duration: 4000,
       close: true,
       gravity: "top", // `top` or `bottom`
       position: "right", // `left`, `center` or `right`
@@ -86,4 +89,35 @@ export function addDays(days = 1, data) {
 
 export function subtractDays(days = 1, data) {
     return addDays(-days, data);
+}
+
+export function addMinutesToDate(date, minutes) {
+    return new Date(date.getTime() + minutes * 60000);
+}
+
+/**
+ * Ajusta la hora de un input datetime-local al intervalo más cercano basado en el porcentaje proporcionado.
+ * @param {Event} event - El evento del input datetime-local.
+ * @param {number} percentage - El porcentaje de hora para redondear (por ejemplo, .5 para media hora, .25 para 15 minutos).
+ */
+export function adjustTimeToNearestInterval(event, percentage) {
+    const input = event.target;
+    const value = input.value;
+
+    if (value) {
+        const date = new Date(value);
+        const minutes = date.getMinutes();
+        const interval = percentage * 60; // Convertir el porcentaje a minutos
+        const adjustedMinutes = Math.round(minutes / interval) * interval;
+        date.setMinutes(adjustedMinutes);
+
+        // Formatear la fecha y hora en el formato local sin convertir a UTC
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const adjustedMinutesStr = String(date.getMinutes()).padStart(2, '0');
+
+        input.value = `${year}-${month}-${day}T${hours}:${adjustedMinutesStr}`;
+    }
 }

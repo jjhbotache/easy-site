@@ -78,7 +78,7 @@ html:not(.dark) .bg-border{border-color: var(--bg) !important;}
 /* add styles to all hover btns */
 dialog::backdrop,
 dialog[open] + .modalBackdrop {
-    position: absolute;
+    position: fixed;
     display: block;
     top: 0;
     left: 0;

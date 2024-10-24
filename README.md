@@ -7,7 +7,8 @@
 - ~~create user scheduler page~~
 - calendar crud for company admin 
    - c 
-      - limit the hours the company admin can book an appointment
+      - --limit the hours the company admin can book an appointment-- (can only multipliers)
+      - send an email to the user
    - r ead the appointments
       - ~~show the details in the modal~~
       - ~~use the configs~~

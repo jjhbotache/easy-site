@@ -1,4 +1,4 @@
-import { myFetch, showAlert, DAYS_OF_WEEK, MONTHS_OF_YEAR, addDays, subtractDays } from "./helpers.js";
+import { myFetch, showAlert, DAYS_OF_WEEK, MONTHS_OF_YEAR, addDays, subtractDays, adjustTimeToNearestInterval, addMinutesToDate } from "./helpers.js";
 
 // Elements
 const calendar_config = JSON.parse(document.getElementById('calendar_config').textContent);
@@ -33,6 +33,7 @@ const nextDaysBtn = document.getElementById('nextDaysBtn');
 // Modal Elements
 const eventModal = document.querySelector('#eventModal');
 const appointmentEditor = eventModal.querySelector('#appointmentEditor');
+
 const addEventBtn = document.querySelector('#addEventBtn');
 const closeModalBtn = appointmentEditor.querySelector('#closeModalBtn');
 
@@ -111,6 +112,7 @@ function syncMiniBoxesToHours() {
                 miniBox = document.importNode(templateOff, true).firstElementChild;
             } else if (existingAppointment) {
                 miniBox = document.importNode(templateBusy, true).firstElementChild;
+                
                 miniBox.addEventListener('click', () => { 
                     setAppointmentDataInEditor(existingAppointment); 
                     eventModal.show(); 
@@ -176,15 +178,23 @@ const handleAppointmentSubmission = async (event) => {
     }
 
     try {
-        const response = await myFetch('/create-appointment/', data);
+        const method = data.event_id ? 'PUT' : 'POST';
+        const response = await myFetch('create-appointment/', data, method);
         if (response.status === 'success') {
-            showAlert('success', '¡Cita creada exitosamente!');
-            appointmentForm.reset(); // Limpiar el formulario después de la creación exitosa
+            showAlert('success', `¡Cita ${method === 'POST' ? 'creada' : 'actualizada'} exitosamente!`);
+            appointmentForm.reset(); // Limpiar el formulario después de la creación/actualización exitosa
+            eventModal.close();
+            setTimeout(() => { window.location.reload();}, 1000);
         } else {
-            showAlert('error', `Error: ${response.message}`);
+            !!response.message.__all__ 
+                ? showAlert('error', `Error: ${response.message.__all__.join('\n')}`)   
+                : showAlert('error', `Error: ${response.message}`);
+            console.log(response);
+            
         }
+        
     } catch (error) {
-        showAlert('error', 'Ocurrió un error al crear la cita.');
+        showAlert('error', `Error: ${error}`);
     }
 };
 
@@ -195,9 +205,38 @@ function addModalEventListeners() {
 
     closeModalBtn.addEventListener('click', () => {
         eventModal.close();
+        // if where editing an appointment, reset the form
+        if (appointmentEditor.event_id.value) {
+            setAppointmentDataInEditor();
+        }
     });
 
     appointmentEditor.addEventListener('submit', handleAppointmentSubmission);
+
+    const endDateInput = appointmentEditor.querySelector('#endDatetime');
+    const startDateInput = appointmentEditor.querySelector('#startDatetime');        
+
+    endDateInput.addEventListener('change', (event) => { adjustTimeToNearestInterval(event, calendar_config.appointment_duration); });
+
+    // whenever the start date changes, update the end date to be the start date + appointment duration
+    startDateInput.addEventListener('change', (event) => {
+        adjustTimeToNearestInterval(event, calendar_config.appointment_duration);
+        
+        const startDate = new Date(event.target.value);
+        
+        const endDate = addMinutesToDate(startDate, calendar_config.appointment_duration * 60);
+        
+        // Format endDate to local date-time string
+        const year = endDate.getFullYear();
+        const month = String(endDate.getMonth() + 1).padStart(2, '0');
+        const day = String(endDate.getDate()).padStart(2, '0');
+        const hours = String(endDate.getHours()).padStart(2, '0');
+        const minutes = String(endDate.getMinutes()).padStart(2, '0');
+        
+        endDateInput.value = `${year}-${month}-${day}T${hours}:${minutes}`;
+    });
+
+
 }
 
 function addEventListeners() {
@@ -213,29 +252,22 @@ function addEventListeners() {
 }
 
 function setAppointmentDataInEditor(appointmentData) {
-    let data;
+    
     if (appointmentData) {
-        data = appointmentData;
+        document.querySelector("#modalTitle").textContent = 'Editar Cita';
         // fill the form
-        appointmentEditor.full_name.value = data.full_name;
-        appointmentEditor.email.value = data.email;
-        appointmentEditor.phone_number.value = data.phone_number;
-        appointmentEditor.message.value = data.message;
-        appointmentEditor.start_datetime.value = data.start_datetime.toISOString().slice(0, 16);
-        appointmentEditor.end_datetime.value = data.end_datetime.toISOString().slice(0, 16);
+        appointmentEditor.event_id.value = appointmentData.id;
+        appointmentEditor.full_name.value = appointmentData.full_name;
+        appointmentEditor.email.value = appointmentData.email;
+        appointmentEditor.phone_number.value = appointmentData.phone_number;
+        appointmentEditor.message.value = appointmentData.message;
+        appointmentEditor.start_datetime.value = appointmentData.start_datetime.toISOString().slice(0, 16);
+        appointmentEditor.end_datetime.value = appointmentData.end_datetime.toISOString().slice(0, 16);
         
     } else {
-        data = {
-            id: null,
-            start_datetime: undefined,
-            end_datetime: undefined,
-            full_name: '',
-            email: '',
-            phone_number: '',
-            message: "",
-        };
-        // reset the form
+        document.querySelector("#modalTitle").textContent = 'Nueva Cita';
         appointmentEditor.reset();
+        appointmentEditor.event_id.value = null;
     }
 }
 
