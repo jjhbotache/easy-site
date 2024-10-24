@@ -52,6 +52,11 @@ class CompanyAdmin(admin.ModelAdmin):
         
 
 class AppointmentAdmin(admin.ModelAdmin):
+    def get_list_filter(self, request):
+        if request.user.is_superuser:
+            return ('company', 'start_datetime', 'end_datetime')
+        return ('start_datetime', 'end_datetime')
+    search_fields = ('full_name', 'email', 'phone_number', 'message')
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)

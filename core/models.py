@@ -4,6 +4,7 @@ from django.contrib.auth.hashers import make_password
 from django.core.validators import FileExtensionValidator, EmailValidator, RegexValidator
 from django.db import models
 from django.forms import DateTimeField, ValidationError
+from django.utils.timezone import make_aware, is_aware
 
 class User(AbstractUser):
   is_company_admin = models.BooleanField(default=True)
@@ -16,7 +17,7 @@ class User(AbstractUser):
 
 
 def default_off_hours():return [12, 13, 14]
-def default_off_days_of_the_week(): return [7, 1]
+def default_off_days_of_the_week(): return [6,7]
 class Company(models.Model):
     name = models.CharField(max_length=255)
     company_description = models.TextField(blank=True, null=True)
@@ -43,13 +44,13 @@ class Company(models.Model):
     enable_appointments = models.BooleanField(default=True, help_text="Enable or disable appointments (calendar)")
     appointment_duration = models.FloatField(
         default=0.25, 
-        help_text="Duration of each appointment in hours (e.g., 0.25 for 15 minutes)",
+        help_text="Duration must be 0.25, 0.5, or 1 hour.",
         validators=[RegexValidator(regex=r'^(0\.25|0\.5|1)$', message="Duration must be 0.25, 0.5, or 1 hour.")]
     )
     appointment_start_time = models.IntegerField(default=8, help_text="Start time for appointments (e.g., 8 for 8 AM)")
     appointment_end_time = models.IntegerField(default=20, help_text="End time for appointments (e.g., 20 for 8 PM)")
     off_hours = models.JSONField(default=default_off_hours, help_text="List of off hours (e.g., [12, 13, 14] for 12 PM, 1 PM, and 2 PM)")
-    off_days_of_the_week = models.JSONField(default=default_off_days_of_the_week, help_text="List of off days of the week (e.g., [7, 1] for Sunday and Saturday)")
+    off_days_of_the_week = models.JSONField(default=default_off_days_of_the_week, help_text="List of off days of the week (e.g., [6, 7] for Sunday and Saturday)")
 
     owner = models.OneToOneField('core.User', on_delete=models.CASCADE, related_name='company')
     
@@ -86,7 +87,7 @@ class Appointment(models.Model):
     message = models.TextField(blank=True, null=True)
     
     def __str__(self):
-        return f"{self.full_name} {self.start_datetime.strftime('%d/%m/%Y %H:%M')} - {self.end_datetime.strftime('%H:%M %d/%m/%Y ')}"
+        return f"{self.company}) {self.full_name} {self.start_datetime.strftime('%d/%m/%Y %H:%M')} - {self.end_datetime.strftime('%H:%M %d/%m/%Y ')}"
     
     def clean(self):
         # Validar que la cita no esté en un día de descanso
@@ -100,8 +101,14 @@ class Appointment(models.Model):
         if start_hour in self.company.off_hours or end_hour in self.company.off_hours:
             raise ValidationError("No se pueden agendar citas en las horas de descanso.")
         
-        # Validar que la cita no esté en el pasado
-        if self.start_datetime < datetime.datetime.now():
+        # Convert all datetimes to aware and ensure they are aware
+        if not is_aware(self.start_datetime):self.start_datetime = make_aware(self.start_datetime)
+        if not is_aware(self.end_datetime):self.end_datetime = make_aware(self.end_datetime)
+        
+        # Validar que la cita no esté en el pasado    
+        current_time = make_aware(datetime.datetime.now())
+        
+        if self.start_datetime < current_time:
             raise ValidationError("No se pueden agendar citas en el pasado.")
 
         # Validar que la cita termine después de que empieza

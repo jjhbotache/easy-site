@@ -119,6 +119,19 @@ function syncMiniBoxesToHours() {
                 });
             } else {
                 miniBox = document.importNode(template, true).firstElementChild;
+                // when clicked, set the start and end time in the form
+                miniBox.addEventListener('click', () => {
+                    const startDate = new Date(dataOnCalendar.year, dataOnCalendar.month, day, hour, i * calendar_config.appointment_duration);
+                    const endDate = addMinutesToDate(startDate, calendar_config.appointment_duration * 60);
+                
+                    // Convertir a naive eliminando la información de la zona horaria
+                    const naiveStartDate = new Date(startDate.getTime() - (startDate.getTimezoneOffset() * 60000));
+                    const naiveEndDate = new Date(endDate.getTime() - (endDate.getTimezoneOffset() * 60000));
+                
+                    appointmentEditor.start_datetime.value = naiveStartDate.toISOString().slice(0, 16);
+                    appointmentEditor.end_datetime.value = naiveEndDate.toISOString().slice(0, 16);
+                    eventModal.show();
+                });
             }
     
             miniBox.setAttribute('data-info', JSON.stringify(miniBoxData));
