@@ -4,7 +4,7 @@ from core.logic.helpers.logic_helpers import company_from_request, send_gmail
 from core.logic.helpers.str_helpers import get_color_variations, get_company_name_from_url
 from core.models import Appointment, Product, Company
 from django.conf import settings
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.utils.dateparse import parse_datetime
 from .models import Appointment, Company
 import json
@@ -163,6 +163,7 @@ def contact_through_mail(request):
 def create_appointment(request):
     if request.method == 'POST':
         data = json.loads(request.body)
+        print(data)
         try:
             company = company_from_request(request)
             response = create_appointment_logic(data, company)
@@ -191,3 +192,8 @@ def create_appointment(request):
         return JsonResponse(response)
     else:
         return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
+
+def cancel_appointment(request, token):
+    appointment = get_object_or_404(Appointment, cancel_token=token)
+    appointment.delete()
+    return HttpResponse("Cita cancelada exitosamente.")

@@ -1,10 +1,11 @@
-import datetime
+import uuid
+from pytz import timezone
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.hashers import make_password
 from django.core.validators import FileExtensionValidator, EmailValidator, RegexValidator
 from django.db import models
 from django.forms import DateTimeField, ValidationError
-from django.utils.timezone import make_aware, is_aware
+from django.utils.timezone import make_aware, is_aware, now
 
 class User(AbstractUser):
   is_company_admin = models.BooleanField(default=True)
@@ -30,6 +31,7 @@ class Company(models.Model):
     logo_small = models.ImageField(upload_to='logos/small/', validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'svg'])], help_text="The logo of the company (small size and dark)")
     logo_large = models.ImageField(upload_to='logos/large/', validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'svg'])])
     # company data
+    country_utc_offset = models.IntegerField(default=-5,help_text="The UTC offset of the country of the company (colombia is -5)")
     location = models.CharField(max_length=255)
     email = models.EmailField()
     instagram = models.URLField(blank=True, null=True)
@@ -60,7 +62,6 @@ class Company(models.Model):
     def __str__(self):
         return self.name
 
-
 class Product(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='products')
     name = models.CharField(max_length=255)
@@ -85,20 +86,26 @@ class Appointment(models.Model):
         validators=[RegexValidator(regex=r'^\d{10,15}$', message="Enter a valid phone number.")]
     )
     message = models.TextField(blank=True, null=True)
+    cancel_token = models.UUIDField(default=uuid.uuid4, unique=True)
     
     def __str__(self):
-        return f"{self.company}) {self.full_name} {self.start_datetime.strftime('%d/%m/%Y %H:%M')} - {self.end_datetime.strftime('%H:%M %d/%m/%Y ')}"
+        local_tz = timezone(f'Etc/GMT+{abs(self.company.country_utc_offset)}')
+        start_datetime_local = self.start_datetime.astimezone(local_tz)
+        end_datetime_local = self.end_datetime.astimezone(local_tz)
+        return f"{self.company}) {self.full_name} {start_datetime_local.strftime('%d/%m/%Y %H:%M')} - {end_datetime_local.strftime('%H:%M %d/%m/%Y ')} ({local_tz})"
     
     def clean(self):
         # Validar que la cita no esté en un día de descanso
         day_of_week = self.start_datetime.weekday() + 1  # Monday is 0 in Python, so add 1 to match the model's convention
         if day_of_week in self.company.off_days_of_the_week:
+            print(f"No se pueden agendar citas los días {day_of_week}.")
             raise ValidationError(f"No se pueden agendar citas los días {day_of_week}.")
 
         # Validar que la cita no esté en una hora de descanso
-        start_hour = self.start_datetime.hour
-        end_hour = self.end_datetime.hour
+        start_hour = self.start_datetime.hour + (self.company.country_utc_offset)
+        end_hour = self.end_datetime.hour + (self.company.country_utc_offset)
         if start_hour in self.company.off_hours or end_hour in self.company.off_hours:
+            print(f"No se pueden agendar citas en las horas de descanso: {start_hour} - {end_hour} - {self.company.off_hours}")
             raise ValidationError("No se pueden agendar citas en las horas de descanso.")
         
         # Convert all datetimes to aware and ensure they are aware
@@ -106,7 +113,10 @@ class Appointment(models.Model):
         if not is_aware(self.end_datetime):self.end_datetime = make_aware(self.end_datetime)
         
         # Validar que la cita no esté en el pasado    
-        current_time = make_aware(datetime.datetime.now())
+        current_time = now()
+        
+        # print(f"Current time: {current_time}")
+        # print(f"Appointment start time: {self.start_datetime}")
         
         if self.start_datetime < current_time:
             raise ValidationError("No se pueden agendar citas en el pasado.")
@@ -133,3 +143,4 @@ class Appointment(models.Model):
     def save(self, *args, **kwargs):
         self.full_clean()  # Llama a clean() y valida el modelo antes de guardar
         super().save(*args, **kwargs)
+    

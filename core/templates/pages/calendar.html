@@ -31,11 +31,14 @@
         <div id="calendar" class="grid grid-cols-4 gap-1 bg-bg p-4 pt-0" >
             <!-- firsts rows -->
             <div class="sticky top-0 bg-bg z-10">
-                <div class="flex justify-evenly items-center py-1">
-                    <button id="prevDaysBtn" class="py-1 px-2 primary-bg bg-color rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 active:bg-primary-dark active:ring-2 active:ring-primary active:ring-opacity-50" title="Previos 3 días">
+                <div class="flex justify-evenly items-center py-1 flex-wrap gap-1">
+                    <button id="todayBtn" class="py-1 px-1 primary-bg bg-color rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 active:bg-primary-dark active:ring-2 active:ring-primary active:ring-opacity-50 w-5/6 md:w-auto md:order-2 " title="Hoy">
+                        Hoy
+                    </button>
+                    <button id="prevDaysBtn" class="py-1 px-2 primary-bg bg-color rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 active:bg-primary-dark active:ring-2 active:ring-primary active:ring-opacity-50 md:order-1" title="Previo dia">
                         <i class="fi fi-rr-angle-left"></i>
                     </button>
-                    <button id="nextDaysBtn" class="py-1 px-2 primary-bg bg-color rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 active:bg-primary-dark active:ring-2 active:ring-primary active:ring-opacity-50" title="Próximos 3 días">
+                    <button id="nextDaysBtn" class="py-1 px-2 primary-bg bg-color rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 active:bg-primary-dark active:ring-2 active:ring-primary active:ring-opacity-50 md:order-3" title="Próximo dia">
                         <i class="fi fi-rr-angle-right"></i>
                     </button>
                 </div>

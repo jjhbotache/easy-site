@@ -8,8 +8,8 @@
 - calendar crud for company admin 
    - c 
       - --limit the hours the company admin can book an appointment-- (can only multipliers)
-      -  --send an email to the user --
-      -  --autofill the form when a minibox is clicked--
+      - --send an email to the user --
+      - --autofill the form when a minibox is clicked--
    - r ead the appointments
       - ~~show the details in the modal~~
       - ~~use the configs~~

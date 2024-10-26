@@ -1,7 +1,13 @@
 import { myFetch, showAlert, DAYS_OF_WEEK, MONTHS_OF_YEAR, addDays, subtractDays, adjustTimeToNearestInterval, addMinutesToDate } from "./helpers.js";
 
+
 // Elements
-const calendar_config = JSON.parse(document.getElementById('calendar_config').textContent);
+const calendar_config = JSON.parse(document.getElementById('calendar_config').textContent, (key, value) => {
+    if (key === 'appointment_start_time' || key === 'appointment_end_time') {
+        return parseInt(value.split(':')[0]);
+    }
+    return value;
+});
 
 console.log(calendar_config);
 
@@ -21,14 +27,17 @@ appointments.forEach(appointment => {
     const pseudoId = `${start.getFullYear()}-${String(start.getMonth() + 1).padStart(2, '0')}-${String(start.getDate()).padStart(2, '0')}-${startMinutes}-${endMinutes}`;
     appointment.pseudoId = pseudoId;
 });
+console.log(appointments);
 
-const calendar = document.querySelector('#calendar');
+
 const headerDay1 = document.querySelector('#headerDay1');
 const headerDay2 = document.querySelector('#headerDay2');
 const headerDay3 = document.querySelector('#headerDay3');
 const headers = [headerDay1, headerDay2, headerDay3];
 const prevDaysBtn = document.getElementById('prevDaysBtn');
 const nextDaysBtn = document.getElementById('nextDaysBtn');
+
+const todayBtn = document.getElementById('todayBtn');
 
 // Modal Elements
 const eventModal = document.querySelector('#eventModal');
@@ -82,8 +91,6 @@ function syncMiniBoxesToHours() {
         hourBox.innerHTML = ""; // Limpiar el hourBox
     
         const isOffTime = hour < calendar_config.appointment_start_time || hour >= calendar_config.appointment_end_time || calendar_config.off_hours.includes(hour);
-        
-        
         const isOffDay = calendar_config.off_days_of_the_week.includes(dayOfWeek);
     
         for (let i = 0; i < amountOfMiniBoxes; i++) {
@@ -100,15 +107,43 @@ function syncMiniBoxesToHours() {
                 startMinute: startMinute,
                 endMinute: endMinute
             };
+            
     
-            const existingAppointment = appointments.find(appointment => 
-                appointment.start_datetime.getDate() === miniBoxData.day &&
-                appointment.start_datetime.getUTCHours() * 60 + appointment.start_datetime.getMinutes() < miniBoxData.endMinute &&
-                appointment.end_datetime.getUTCHours() * 60 + appointment.end_datetime.getMinutes() > miniBoxData.startMinute
-            );
+            
     
             let miniBox;
-            if (isOffTime || isOffDay) {
+            
+            // obtener los milisegundos desde la epoca absoluta
+            const today = new Date();
+            const todayMilliseconds = today.getTime(); 
+
+            const appointmentStartTimeInMinutes = Math.abs( (hour * 60) - startMinute);
+            const appointmentEndTimeInMinutes = Math.abs( (hour * 60) - endMinute);
+            const miniBoxDateEnd = new Date(
+                miniBoxData.year,
+                miniBoxData.month,
+                miniBoxData.day,
+                hour,
+                appointmentEndTimeInMinutes
+            );
+            const miniBoxDateStart = new Date(
+                miniBoxData.year,
+                miniBoxData.month,
+                miniBoxData.day,
+                hour,
+                appointmentStartTimeInMinutes
+            );
+
+            const miniBoxTimestamp = miniBoxDateStart.getTime();
+            const miniBoxIsInThePast = miniBoxTimestamp < todayMilliseconds;
+            
+            const existingAppointment = appointments.find(appointment => 
+                appointment.start_datetime < miniBoxDateEnd &&
+                appointment.end_datetime > miniBoxDateStart );  
+
+            
+
+            if (isOffTime || isOffDay ||  miniBoxIsInThePast) {
                 miniBox = document.importNode(templateOff, true).firstElementChild;
             } else if (existingAppointment) {
                 miniBox = document.importNode(templateBusy, true).firstElementChild;
@@ -121,12 +156,10 @@ function syncMiniBoxesToHours() {
                 miniBox = document.importNode(template, true).firstElementChild;
                 // when clicked, set the start and end time in the form
                 miniBox.addEventListener('click', () => {
-                    const startDate = new Date(dataOnCalendar.year, dataOnCalendar.month, day, hour, i * calendar_config.appointment_duration);
-                    const endDate = addMinutesToDate(startDate, calendar_config.appointment_duration * 60);
-                
+                    
                     // Convertir a naive eliminando la información de la zona horaria
-                    const naiveStartDate = new Date(startDate.getTime() - (startDate.getTimezoneOffset() * 60000));
-                    const naiveEndDate = new Date(endDate.getTime() - (endDate.getTimezoneOffset() * 60000));
+                    const naiveStartDate = new Date(miniBoxDateStart.getTime() - (miniBoxDateStart.getTimezoneOffset() * 60000));
+                    const naiveEndDate = new Date(miniBoxDateEnd.getTime() - (miniBoxDateEnd.getTimezoneOffset() * 60000));
                 
                     appointmentEditor.start_datetime.value = naiveStartDate.toISOString().slice(0, 16);
                     appointmentEditor.end_datetime.value = naiveEndDate.toISOString().slice(0, 16);
@@ -190,6 +223,13 @@ const handleAppointmentSubmission = async (event) => {
         return;
     }
 
+    // Convertir las fechas a cadenas ISO completas con la zona horaria local del cliente
+    const startDate = new Date(data.start_datetime);
+    const endDate = new Date(data.end_datetime);
+
+    data.start_datetime = startDate.toISOString();
+    data.end_datetime = endDate.toISOString();
+
     try {
         const method = data.event_id ? 'PUT' : 'POST';
         const response = await myFetch('create-appointment/', data, method);
@@ -197,15 +237,13 @@ const handleAppointmentSubmission = async (event) => {
             showAlert('success', `¡Cita ${method === 'POST' ? 'creada' : 'actualizada'} exitosamente!`);
             appointmentForm.reset(); // Limpiar el formulario después de la creación/actualización exitosa
             eventModal.close();
-            setTimeout(() => { window.location.reload();}, 1000);
+            setTimeout(() => { window.location.reload(); }, 1000);
         } else {
             !!response.message.__all__ 
                 ? showAlert('error', `Error: ${response.message.__all__.join('\n')}`)   
                 : showAlert('error', `Error: ${response.message}`);
             console.log(response);
-            
         }
-        
     } catch (error) {
         showAlert('error', `Error: ${error}`);
     }
@@ -261,6 +299,31 @@ function addEventListeners() {
         updateCalendar(1);
     });
 
+    todayBtn.addEventListener('click', () => {
+        // calcula la diferencia de dias entre la fecha actual y la fecha en el calendario
+        /*
+        const dataOnCalendar = {
+            day: currentDay,
+            month: currentMonth,
+            year: currentYear,
+            dayOfWeek: currentDayOfWeek
+        };
+        */
+        const currentDate = new Date();
+        const currentDay = currentDate.getDate();
+        const currentMonth = currentDate.getMonth();
+        const currentYear = currentDate.getFullYear();
+        const currentDayOfWeek = currentDate.getDay();
+        const newDate = {
+            day: currentDay,
+            month: currentMonth,
+            year: currentYear,
+            dayOfWeek: currentDayOfWeek
+        };
+        const diffDays = (new Date(newDate.year, newDate.month, newDate.day) - new Date(dataOnCalendar.year, dataOnCalendar.month, dataOnCalendar.day)) / (1000 * 60 * 60 * 24);
+        updateCalendar(diffDays);
+        
+    });
     addModalEventListeners();
 }
 
