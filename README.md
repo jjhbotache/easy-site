@@ -14,9 +14,11 @@
       - ~~show the details in the modal~~
       - ~~use the configs~~
    - u pdate the 
-      - take in account the restrictions
+      - ~~take in account the restrictions~~
    - d elete
-      - send an email to the user with a msg
+      - ~~send an email to the user with a msg~~
+- solve bugs:
+   - ~~show the hour right in the editor of a busy time~~
 
 
 

@@ -45,6 +45,7 @@ const appointmentEditor = eventModal.querySelector('#appointmentEditor');
 
 const addEventBtn = document.querySelector('#addEventBtn');
 const closeModalBtn = appointmentEditor.querySelector('#closeModalBtn');
+const deleteEventBtn = appointmentEditor.querySelector('#deleteEventBtn');
 
 // Current Date
 const currentDate = new Date();
@@ -63,7 +64,7 @@ const dataOnCalendar = {
 };
 
 function main() {
-    window[`day1Hour${Math.max(currentHour - 2, 0)}`].scrollIntoView({ behavior: 'smooth', block: 'start' }); // scrollToCurrentHour
+    scrollToCurrentHour()
 
     // for all the .hourBox, according to the current to the calendar_config.appointment_duration, add mini boxes
     syncMiniBoxesToHours();
@@ -139,7 +140,9 @@ function syncMiniBoxesToHours() {
             
             const existingAppointment = appointments.find(appointment => 
                 appointment.start_datetime < miniBoxDateEnd &&
-                appointment.end_datetime > miniBoxDateStart );  
+                appointment.end_datetime > miniBoxDateStart 
+            );  
+            
 
             
 
@@ -337,15 +340,48 @@ function setAppointmentDataInEditor(appointmentData) {
         appointmentEditor.email.value = appointmentData.email;
         appointmentEditor.phone_number.value = appointmentData.phone_number;
         appointmentEditor.message.value = appointmentData.message;
-        appointmentEditor.start_datetime.value = appointmentData.start_datetime.toISOString().slice(0, 16);
-        appointmentEditor.end_datetime.value = appointmentData.end_datetime.toISOString().slice(0, 16);
-        
-    } else {
+
+        // Convert start_datetime and end_datetime to local datetime format
+        const startDate = new Date(appointmentData.start_datetime);
+        const endDate = new Date(appointmentData.end_datetime);
+
+        const startDateTimeLocal = new Date(startDate.getTime() - startDate.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+        const endDateTimeLocal = new Date(endDate.getTime() - endDate.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+
+        appointmentEditor.start_datetime.value = startDateTimeLocal;
+        appointmentEditor.end_datetime.value = endDateTimeLocal;
+
+        // get the #deleteEventBtn and show it
+        deleteEventBtn.classList.remove('hidden');
+        deleteEventBtn.addEventListener('click', async () => {
+            const response = await myFetch(`cancel-appointment/${appointmentData.cancel_token}/`, {
+                message: prompt('Por favor, ingrese un mensaje que verá el usuario:')
+            }, 'DELETE');
+            if (response.status === 'success') {
+                showAlert('success', '¡Cita eliminada exitosamente!');
+                eventModal.close();
+                setTimeout(() => { window.location.reload(); }, 1000);
+            } else {
+                showAlert('error', `Error: ${response.message}`);
+            }
+        })
+
+    }else {
         document.querySelector("#modalTitle").textContent = 'Nueva Cita';
         appointmentEditor.reset();
         appointmentEditor.event_id.value = null;
+
+        // get the #deleteEventBtn and hidde it
+        deleteEventBtn.classList.add('hidden');
     }
 }
 
+function scrollToCurrentHour() {
+    const idealHourToScroll = Math.max(currentHour - 2, 0)
+    const hourToScroll =  idealHourToScroll < calendar_config.appointment_start_time  ? calendar_config.appointment_start_time : 
+                        idealHourToScroll > calendar_config.appointment_end_time ? calendar_config.appointment_end_time : idealHourToScroll;
+    
+    window[`day1Hour${hourToScroll}`].scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 // Initialize
 main();

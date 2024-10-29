@@ -41,3 +41,4 @@ def company_from_request(request):
     company_text = get_company_name_from_url(request.get_full_path())
     company = Company.objects.filter(name__icontains=company_text).order_by('name')[0]
     return company
+

@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, redirect, render
-from core.logic.appointments_logic import create_appointment_logic, update_appointment_logic
+from core.logic.appointments_logic import create_appointment_logic, delete_appointment_logic, update_appointment_logic
 from core.logic.helpers.logic_helpers import company_from_request, send_gmail
 from core.logic.helpers.str_helpers import get_color_variations, get_company_name_from_url
 from core.models import Appointment, Product, Company
@@ -104,7 +104,6 @@ def calendar_view(request):
         "primary_color": get_color_variations(company.primary_color),
         "secondary_color": get_color_variations(company.secondary_color)
     }
-    
     calendar_config = {
         "appointment_duration": company.appointment_duration,
         "appointment_start_time": company.appointment_start_time,
@@ -112,7 +111,6 @@ def calendar_view(request):
         "off_hours": company.off_hours,
         "off_days_of_the_week": company.off_days_of_the_week
     }
-    
     return render(request, 'pages/calendar.html', {
         'appointments': appointments,
         "company": company,
@@ -169,6 +167,7 @@ def create_appointment(request):
             response = create_appointment_logic(data, company)
         except Exception as e:
             error_message = str(e)
+            print(e)
             if hasattr(e, 'message_dict'):
                 error_message = e.message_dict
             response = {
@@ -194,6 +193,12 @@ def create_appointment(request):
         return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
 
 def cancel_appointment(request, token):
-    appointment = get_object_or_404(Appointment, cancel_token=token)
-    appointment.delete()
-    return HttpResponse("Cita cancelada exitosamente.")
+    
+    data = json.loads(request.body) if request.body else {}
+    data["cancel_token"] = token
+    delete_appointment_logic(
+        data,
+        company_from_request(request),
+        message=  "(Cita cancelada por el cliente.)" if request.method == "GET" else data.get('message')
+    )
+    return JsonResponse({'status': 'success', 'message': 'Appointment canceled successfully'})

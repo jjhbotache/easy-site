@@ -1,3 +1,4 @@
+from django.forms import ValidationError
 from django.utils.dateparse import parse_datetime
 from django.urls import reverse
 from django.conf import settings
@@ -51,7 +52,14 @@ def create_appointment_logic(data, company:Company):
     }
 
 def update_appointment_logic(data, company):
-    appointment = Appointment.objects.get(id=data['event_id'], company=company)
+    try:
+        appointment = Appointment.objects.get(id=data['event_id'], company=company)
+    except Appointment.DoesNotExist:
+        return {
+            'status': 'error',
+            'message': 'Cita no encontrada.'
+        }
+
     start_datetime = parse_datetime(data['start_datetime'])
     end_datetime = parse_datetime(data['end_datetime'])
     appointment.start_datetime = start_datetime
@@ -60,27 +68,33 @@ def update_appointment_logic(data, company):
     appointment.email = data.get('email', '')
     appointment.phone_number = data.get('phone_number', '')
     appointment.message = data.get('message', '')
-    appointment.full_clean()  # Llama a clean() y valida el modelo antes de guardar
-    appointment.save()
+
+    try:
+        appointment.full_clean()  # Llama a clean() y valida el modelo antes de guardar
+        appointment.save()
+    except ValidationError as e:
+        return {
+            'status': 'error',
+            'message': f'Error de validación: {e.messages}'
+        }
 
     # Enviar correo electrónico de notificación al cliente
+    cancel_url = f"{settings.FRONT_URL}/{company.name.lower()}/cancel-appointment/{appointment.cancel_token}/"
     if appointment.email:
         subject = "Actualización de Cita"
         body = f"""
         Estimado/a {appointment.full_name},
 
-        Su cita ha sido actualizada exitosamente.
+        Su cita ha sido actualizada!.
 
         Detalles de la cita:
         Fecha y Hora de Inicio: {appointment.start_datetime.strftime('%d/%m/%Y %H:%M')}
         Fecha y Hora de Fin: {appointment.end_datetime.strftime('%d/%m/%Y %H:%M')}
         Mensaje: {appointment.message}
 
-        Puede editar su cita en el siguiente enlace:
-        {reverse('edit_appointment', args=[appointment.id])}
 
         Puede eliminar su cita en el siguiente enlace:
-        {reverse('delete_appointment', args=[appointment.id])}
+        {cancel_url}
 
         Gracias,
         {company.name}
@@ -93,9 +107,24 @@ def update_appointment_logic(data, company):
         'message': 'Cita actualizada exitosamente.'
     }
     
-def delete_appointment_logic(data, company):
-    appointment = Appointment.objects.get(id=data['event_id'], company=company)
+def delete_appointment_logic(data, company, message=None):
+    appointment = Appointment.objects.get(cancel_token=data['cancel_token'], company=company)
     appointment.delete()
+    
+    # enviar un correo electrónico de notificación al cliente
+    if appointment.email:
+        subject = "Cita Cancelada"
+        body = f"""
+        Estimado/a {appointment.full_name},
+        Su cita ha sido cancelada.
+        
+        { message if message else '' }
+        
+        Gracias,
+        {company.name}
+        """
+        send_gmail(appointment.email, subject, body)
+        
     return {
         'status': 'success',
         'message': 'Cita eliminada exitosamente.'
