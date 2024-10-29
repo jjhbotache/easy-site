@@ -106,6 +106,7 @@ class Appointment(models.Model):
         end_hour = self.end_datetime.hour + (self.company.country_utc_offset)
         if start_hour in self.company.off_hours or end_hour in self.company.off_hours:
             print(f"No se pueden agendar citas en las horas de descanso: {start_hour} - {end_hour} - {self.company.off_hours}")
+            print(f"Start hour: {self.start_datetime} - End hour: {self.end_datetime}")
             raise ValidationError("No se pueden agendar citas en las horas de descanso.")
         
         # Convert all datetimes to aware and ensure they are aware
@@ -126,7 +127,7 @@ class Appointment(models.Model):
             raise ValidationError("La cita debe terminar después de que empieza.")
 
         # Validar que la duración de la cita sea correcta
-        duration = (self.end_datetime - self.start_datetime).total_seconds() / 3600.0
+        duration = (self.end_datetime - self.start_datetime).total_seconds() / 3600.0 + 1/60.0 # add 1 minute to the duration
         if duration % self.company.appointment_duration != 0:
             raise ValidationError(f"La duración de la cita debe ser de {self.company.appointment_duration} horas o un múltiplo de la misma.")
 

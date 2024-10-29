@@ -29,6 +29,9 @@ appointments.forEach(appointment => {
 });
 console.log(appointments);
 
+const is_admin = JSON.parse(document.getElementById('is_admin').textContent)
+console.log(is_admin);
+
 
 const headerDay1 = document.querySelector('#headerDay1');
 const headerDay2 = document.querySelector('#headerDay2');
@@ -96,7 +99,7 @@ function syncMiniBoxesToHours() {
     
         for (let i = 0; i < amountOfMiniBoxes; i++) {
             const startMinute = hour * 60 + (i * durationInMinutes);
-            const endMinute = startMinute + durationInMinutes;
+            const endMinute = startMinute + durationInMinutes - 1;
     
             const miniBoxData = {
                 hour: hour,
@@ -151,7 +154,7 @@ function syncMiniBoxesToHours() {
             } else if (existingAppointment) {
                 miniBox = document.importNode(templateBusy, true).firstElementChild;
                 
-                miniBox.addEventListener('click', () => { 
+                is_admin && miniBox.addEventListener('click', () => { 
                     setAppointmentDataInEditor(existingAppointment); 
                     eventModal.show(); 
                 });
@@ -278,7 +281,7 @@ function addModalEventListeners() {
         
         const startDate = new Date(event.target.value);
         
-        const endDate = addMinutesToDate(startDate, calendar_config.appointment_duration * 60);
+        const endDate = addMinutesToDate(startDate, calendar_config.appointment_duration * 60 - 1);
         
         // Format endDate to local date-time string
         const year = endDate.getFullYear();

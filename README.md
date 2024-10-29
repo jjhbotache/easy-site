@@ -8,7 +8,7 @@
 - calendar crud for company admin 
    - c 
       - --limit the hours the company admin can book an appointment-- (can only multipliers)
-      - --send an email to the user --
+      - --send an email to the user--
       - --autofill the form when a minibox is clicked--
    - r ead the appointments
       - ~~show the details in the modal~~
@@ -19,6 +19,21 @@
       - ~~send an email to the user with a msg~~
 - solve bugs:
    - ~~show the hour right in the editor of a busy time~~
+---
+- calendar crud for user
+   - identifies if user o company admin
+   - hide info according to de user:
+      - c ~~allow creates to the user~~
+      - r hide:
+         - ~~cancel token~~
+         - ~~each appointmentinfo~~
+      - u ~~dont allow update~~
+      - d ~~dont allow delete~~
+
+   - update ui to sync it with the functions:
+      - ~~don't show info in dialog when busy is cliked~~
+- solve bugs:
+   - ~~can`t schedule an appointment in the last time colinding with the resthours~~
 
 
 

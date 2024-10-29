@@ -96,6 +96,26 @@ def product_detail(request, product_id):
     })
 
 def calendar_view(request):
+    """
+    Renders the calendar view for the company.
+    This view performs the following actions:
+    - Retrieves the company from the request.
+    - Fetches the list of appointments for the company.
+    - Prepares the color configuration for the calendar based on the company's settings.
+    - Prepares the calendar configuration including appointment duration, start and end times, off hours, and off days of the week.
+    - Identifies if the user is authenticated (admin).
+    User Permissions:
+    - If the user is not an admin:
+        - Hide the cancel token from the appointments.
+        - Hide specific appointment information.
+        - Allow the user to create appointments.
+        - Do not allow the user to update appointments.
+        - Do not allow the user to delete appointments.
+    Args:
+        request (HttpRequest): The HTTP request object.
+    Returns:
+        HttpResponse: The rendered calendar page with the context including appointments, company, colors, and calendar configuration.
+    """
     company = company_from_request(request)
     appointments = list(Appointment.objects.filter(company=company).values())
     colors = {
@@ -111,11 +131,27 @@ def calendar_view(request):
         "off_hours": company.off_hours,
         "off_days_of_the_week": company.off_days_of_the_week
     }
+    
+    # identify if the user is an admin
+    is_admin = request.user.is_authenticated
+    
+    if not is_admin:
+        # only left the fields that are needed for the user
+        appointments = [ {
+                "id": appointment["id"],
+                "start_datetime": appointment["start_datetime"],
+                "end_datetime": appointment["end_datetime"],
+            } for appointment in appointments ]
+        
+            
+    
+    print(is_admin)
     return render(request, 'pages/calendar.html', {
         'appointments': appointments,
         "company": company,
         "colors": colors,
-        "calendar_config": calendar_config
+        "calendar_config": calendar_config,
+        "is_admin": is_admin
     })
     
 def contact_through_mail(request):
@@ -176,6 +212,10 @@ def create_appointment(request):
             }
         return JsonResponse(response)
     elif request.method == 'PUT':
+        # only allow to company admins to update appointments
+        if not request.user.is_authenticated:
+            return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=403)
+        
         data = json.loads(request.body)
         try:
             company = company_from_request(request)
@@ -201,4 +241,5 @@ def cancel_appointment(request, token):
         company_from_request(request),
         message=  "(Cita cancelada por el cliente.)" if request.method == "GET" else data.get('message')
     )
-    return JsonResponse({'status': 'success', 'message': 'Appointment canceled successfully'})
+    # if it was a get, return a success message, other wise return a json response
+    return HttpResponse("Cita cancelada con éxito." if request.method == "GET" else JsonResponse({'status': 'success'}))
