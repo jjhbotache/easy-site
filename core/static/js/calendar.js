@@ -216,12 +216,14 @@ function updateCalendar(days) {
     syncDataOnCalendar(dataOnCalendar);
 }
 
-const handleAppointmentSubmission = async (event) => {
-    event.preventDefault();
-    const appointmentForm = event.target;
 
+async function handleAppointmentSubmission (capchaToken) {
+    const appointmentForm = document.querySelector('#appointmentEditor');
+    
+    
     const formData = new FormData(appointmentForm);
     const data = Object.fromEntries(formData.entries());
+    data['g-recaptcha-response'] = capchaToken || '';
 
     // Verificar que todos los campos requeridos estén completos
     if (!data.full_name || !data.start_datetime || !data.end_datetime) {
@@ -254,6 +256,7 @@ const handleAppointmentSubmission = async (event) => {
         showAlert('error', `Error: ${error}`);
     }
 };
+window.handleAppointmentSubmission = handleAppointmentSubmission;
 
 function addModalEventListeners() {
     addEventBtn.addEventListener('click', () => {
@@ -268,7 +271,7 @@ function addModalEventListeners() {
         }
     });
 
-    appointmentEditor.addEventListener('submit', handleAppointmentSubmission);
+    // appointmentEditor.addEventListener('submit', handleAppointmentSubmission);
 
     const endDateInput = appointmentEditor.querySelector('#endDatetime');
     const startDateInput = appointmentEditor.querySelector('#startDatetime');        

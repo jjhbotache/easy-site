@@ -8,6 +8,11 @@
 
 {% block content %}
 
+{% block head %}
+<script type="module" src="{% static "js/calendar.js" %}"></script>
+<script type="module" src="{% static "js/helpers.js" %}"></script>
+{% endblock head %}
+
 <main class="flex h-full flex-col bg-bg shadow-2xl">
     <!-- Encabezado -->
     <header class="bg-bg shadow-md p-4 h-auto">
@@ -122,13 +127,32 @@
             <textarea id="message" name="message" class="text-bg bg-bg shadow-md appearance-none border rounded w-full py-2 px-3 leading-tight resize-none
             focus:outline-none focus:shadow-outline"></textarea>
         </div>
+
         <div class="flex items-center justify-between">
-            <button type="submit" class="primary-bg bg-color hover:bg-primary-dark text-bg font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Guardar</button>
-            <button type="button" id="deleteEventBtn" class="text-color border text-border font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline flex justify-center items-center gap-1 hidden">
+            
+            {% if not is_admin %}
+            <button 
+                data-sitekey="6Lexvm8qAAAAAOqPzKZZlFG3fFhhC8P62SXiYy5A" 
+                data-callback='handleAppointmentSubmission' 
+                data-action='submit'
+                class="g-recaptcha
+                primary-bg bg-color hover:bg-primary-dark text-bg font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                >Guardar</button>
+            {% else %}
+            <button 
+                type="button"
+                onclick="handleAppointmentSubmission()"
+                class="primary-bg bg-color hover:bg-primary-dark text-bg font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                >Guardar</button>
+            {% endif %}
+            
+
+            <button type="button" id="deleteEventBtn" class="text-color border text-border font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline  justify-center items-center gap-1 hidden">
                 <i class="fi fi-rr-trash"></i> <span class="hidden md:inline-block">Eliminar</span>
             </button>
             <button type="button" id="closeModalBtn" class=" text-color border text-border font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Cerrar</button>
         </div>
+        
     </form>
 </dialog>
 <div class="modalBackdrop "></div>
@@ -144,6 +168,6 @@
 {{appointments|json_script:"appointments"}}
 {{is_admin|json_script:"is_admin"}}
 
-<script type="module" src="{% static "js/helpers.js" %}"></script>
-<script type="module" src="{% static "js/calendar.js" %}"></script>
+
+
 {% endblock content %}

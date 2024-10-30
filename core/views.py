@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from core.logic.appointments_logic import create_appointment_logic, delete_appointment_logic, update_appointment_logic
-from core.logic.helpers.logic_helpers import company_from_request, send_gmail
+from core.logic.helpers.logic_helpers import company_from_request, send_gmail, verify_recaptcha
 from core.logic.helpers.str_helpers import get_color_variations, get_company_name_from_url
 from core.models import Appointment, Product, Company
 from django.conf import settings
@@ -196,8 +196,13 @@ def contact_through_mail(request):
 
 def create_appointment(request):
     if request.method == 'POST':
+        # verify recaptcha
+        token = request.POST.get('g-recaptcha-response')
+        # only allow to authenticated users or anonymous users with recaptcha
+        if verify_recaptcha(token) and request.user.is_authenticated: 
+            return JsonResponse({'status': 'error', 'message': 'Recaptcha verification failed'}, status=403)
+        
         data = json.loads(request.body)
-        print(data)
         try:
             company = company_from_request(request)
             response = create_appointment_logic(data, company)

@@ -15,6 +15,7 @@
         <a href="/nosotros" class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300 text-color">Nosotros</a>
         <a href="/catalogo" class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300 text-color">Catálogo</a>
         <a href="/contacto" class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300 text-color">Contacto</a>
+        <a href="/calendario" class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300 text-color">Calendario</a>
         <button class="theme-toggle outline-none px-4 py-2 secondary-bg text-color rounded-full">
         </button>
       </div>
@@ -42,7 +43,7 @@
       <li><a href="/nosotros" class="navbar__link link block text-sm px-2 py-4 secondary-light-bg transition duration-300 text-color">Nosotros</a></li>
       <li><a href="/catalogo" class="navbar__link link block text-sm px-2 py-4 secondary-light-bg transition duration-300 text-color">Catálogo</a></li>
       <li><a href="/contacto" class="navbar__link link block text-sm px-2 py-4 secondary-light-bg transition duration-300 text-color">Contacto</a></li>
-      <li><a href="/contacto" class="navbar__link link block text-sm px-2 py-4 secondary-light-bg transition duration-300 text-color">Contacto</a></li>
+      <li><a href="/calendario" class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300 text-color">Calendario</a></li>
     </ul>
   </div>
 </div>
@@ -50,8 +51,8 @@
 <script>
   const setThemeIcon = (button) => {
     button.innerHTML = document.documentElement.classList.contains('dark') 
-      ? '<i class="fi fi-rc-moon-stars"></i>' 
-      : '<i class="fi fi-rc-sun"></i>';
+      ? '<i class="fi fi-rc-sun"></i>'
+      : '<i class="fi fi-rc-moon-stars"></i>' 
   };
 
   const applyTheme = (theme) => {

@@ -16,11 +16,13 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     
-    
+    <!-- Google reCAPTCHA -->
+    <script src="https://www.google.com/recaptcha/api.js"></script>
     
     <title>{% block title %}Landing{% endblock %}</title>
     {% block icon %}{% endblock %}
 
+    {% block head %}{% endblock %}
     <style>
         :root {
             --bg: #{{colors.background_color}};
