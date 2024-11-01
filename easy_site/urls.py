@@ -19,9 +19,11 @@ from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
 import core.urls as core_urls
+from .views import landing_page
 # for each company, we will have a landing page
 
 urlpatterns = [
+    path("", landing_page, name="landing_page"),
     path('admin/', admin.site.urls),
     path('', include(core_urls), name='home')
 ] \

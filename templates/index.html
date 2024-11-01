@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>EasySite - Landing Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome CDN for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-..." crossorigin="anonymous">
+</head>
+<body class="bg-gray-100">
+
+    <!-- Header -->
+    <header class="bg-white shadow">
+        <div class="container mx-auto px-4 py-6">
+            <h1 class="text-3xl font-bold text-center text-gray-800">EasySite</h1>
+        </div>
+    </header>
+
+    <!-- Main Section -->
+    <main class="container mx-auto px-4 py-12">
+        <!-- Introduction -->
+        <section class="text-center mb-12">
+            <h2 class="text-4xl font-semibold text-gray-800 mb-6">
+                ¿Tienes una empresa y deseas mostrar tus productos?
+            </h2>
+            <p class="text-lg text-gray-600 mb-4">
+                EasySite te ayuda a crear una presencia en línea profesional de forma sencilla y rápida.
+            </p>
+            <p class="text-lg text-gray-600 mb-4">
+                Muestra tus productos, promociona tus servicios y alcanza a más clientes sin complicaciones.
+            </p>
+            <p class="text-lg text-gray-600 mb-8">
+                Personaliza tu sitio web, gestiona citas con tus clientes y configura diversos aspectos para adaptarlo a tus necesidades específicas.
+            </p>
+            <a href="https://api.whatsapp.com/send?phone=573012167977&text=Hola%2C%20estoy%20interesado%20en%20Easy%20Site" class="inline-flex items-center px-6 py-3 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 transition duration-300">
+                <i class="fab fa-whatsapp mr-2"></i>
+                Contáctanos por WhatsApp
+            </a>
+        </section>
+        <!-- Testimonials Section -->
+        {% comment %} <section class="bg-white py-12">
+          <div class="container mx-auto px-4">
+            <h3 class="text-3xl font-semibold text-gray-800 mb-6 text-center">
+              Lo que dicen nuestros clientes
+            </h3>
+            <div class="flex flex-wrap justify-center">
+              <!-- Testimonial 1 -->
+              <div class="w-full md:w-1/3 p-4">
+                <div class="bg-gray-100 rounded-lg shadow p-6">
+                  <p class="text-gray-600 mb-4">
+                    "EasySite ha transformado la presencia en línea de mi negocio. Es fácil de usar y altamente personalizable."
+                  </p>
+                  <div class="flex items-center">
+                    <img src="path/to/avatar1.jpg" alt="Cliente 1" class="w-12 h-12 rounded-full mr-4">
+                    <div>
+                      <p class="text-gray-800 font-semibold">Juan Pérez</p>
+                      <p class="text-gray-500 text-sm">Dueño de Empresa</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Testimonial 2 -->
+              <div class="w-full md:w-1/3 p-4">
+                <div class="bg-gray-100 rounded-lg shadow p-6">
+                  <p class="text-gray-600 mb-4">
+                    "La gestión de calendario es excepcional, me ha permitido organizar mis citas de manera eficiente."
+                  </p>
+                  <div class="flex items-center">
+                    <img src="path/to/avatar2.jpg" alt="Cliente 2" class="w-12 h-12 rounded-full mr-4">
+                    <div>
+                      <p class="text-gray-800 font-semibold">María López</p>
+                      <p class="text-gray-500 text-sm">Gerente de Marketing</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Testimonial 3 -->
+              <div class="w-full md:w-1/3 p-4">
+                <div class="bg-gray-100 rounded-lg shadow p-6">
+                  <p class="text-gray-600 mb-4">
+                    "La personalización de diseño me permitió reflejar perfectamente la identidad de mi marca en el sitio web."
+                  </p>
+                  <div class="flex items-center">
+                    <img src="path/to/avatar3.jpg" alt="Cliente 3" class="w-12 h-12 rounded-full mr-4">
+                    <div>
+                      <p class="text-gray-800 font-semibold">Carlos Gómez</p>
+                      <p class="text-gray-500 text-sm">Diseñador Gráfico</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section> {% endcomment %}
+
+        <!-- Features Section -->
+        <section class="mb-12">
+          <h3 class="text-3xl font-semibold text-gray-800 mb-6 text-center">
+            Configuraciones Disponibles
+          </h3>
+          <div class="flex flex-wrap justify-center">
+            <!-- Feature 1 -->
+            <div class="w-full md:w-1/3 p-4">
+              <div class="bg-white rounded-lg shadow p-6 flex flex-col h-full">
+                <div class="flex items-center mb-4">
+                  <i class="fas fa-paint-brush text-2xl text-blue-600 mr-2"></i>
+                  <h4 class="text-xl font-semibold">Personalización de Diseño</h4>
+                </div>
+                <p class="text-gray-600 flex-grow">
+                  Ajusta colores, fuentes e imágenes para reflejar la identidad de tu marca.
+                </p>
+              </div>
+            </div>
+            <!-- Feature 2 -->
+            <div class="w-full md:w-1/3 p-4">
+              <div class="bg-white rounded-lg shadow p-6 flex flex-col h-full">
+                <div class="flex items-center mb-4">
+                  <i class="fas fa-calendar-check text-2xl text-green-600 mr-2"></i>
+                  <h4 class="text-xl font-semibold">Gestión de Calendario</h4>
+                </div>
+                <p class="text-gray-600 flex-grow">
+                  Configura horarios disponibles, duración de citas y días festivos según tus necesidades.
+                </p>
+              </div>
+            </div>
+            <!-- Feature 3 -->
+            <div class="w-full md:w-1/3 p-4">
+              <div class="bg-white rounded-lg shadow p-6 flex flex-col h-full">
+                <div class="flex items-center mb-4">
+                  <i class="fas fa-tags text-2xl text-red-600 mr-2"></i>
+                  <h4 class="text-xl font-semibold">Administración de Productos</h4>
+                </div>
+                <p class="text-gray-600 flex-grow">
+                  Agrega, edita y organiza tus productos con descripciones detalladas e imágenes atractivas.
+                </p>
+              </div>
+            </div>
+            <!-- Feature 4 -->
+            <div class="w-full md:w-1/3 p-4">
+              <div class="bg-white rounded-lg shadow p-6 flex flex-col h-full">
+                <div class="flex items-center mb-4">
+                  <i class="fas fa-envelope-open-text text-2xl text-yellow-600 mr-2"></i>
+                  <h4 class="text-xl font-semibold">Mensajes Personalizados</h4>
+                </div>
+                <p class="text-gray-600 flex-grow">
+                  Personaliza mensajes de confirmación, notificaciones y respuestas automáticas.
+                </p>
+              </div>
+            </div>
+            <!-- Feature 5 -->
+            <div class="w-full md:w-1/3 p-4">
+              <div class="bg-white rounded-lg shadow p-6 flex flex-col h-full">
+                <div class="flex items-center mb-4">
+                  <i class="fas fa-share-alt text-2xl text-purple-600 mr-2"></i>
+                  <h4 class="text-xl font-semibold">Integraciones Sociales</h4>
+                </div>
+                <p class="text-gray-600 flex-grow">
+                  Conecta tus redes sociales y facilita que tus clientes te encuentren en todas partes.
+                </p>
+              </div>
+            </div>
+            <!-- Feature 6 -->
+            <div class="w-full md:w-1/3 p-4">
+              <div class="bg-white rounded-lg shadow p-6 flex flex-col h-full">
+                <div class="flex items-center mb-4">
+                  <i class="fas fa-cogs text-2xl text-teal-600 mr-2"></i>
+                  <h4 class="text-xl font-semibold">Ajustes Avanzados</h4>
+                </div>
+                <p class="text-gray-600 flex-grow">
+                  Controla aspectos avanzados como disponibilidad, horarios especiales y más.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="text-center">
+            <h3 class="text-3xl font-semibold text-gray-800 mb-6">
+                ¿Listo para Personalizar tu Sitio?
+            </h3>
+            <a href="https://api.whatsapp.com/send?phone=573012167977&text=Hola%2C%20estoy%20interesado%20en%20Easy%20Site" class="inline-flex items-center px-6 py-3 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 transition duration-300">
+              <i class="fab fa-whatsapp mr-2"></i>
+              Contáctanos por WhatsApp
+            </a>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="container mx-auto px-4 py-12">
+            <h3 class="text-3xl font-semibold text-gray-800 mb-6 text-center">
+          Preguntas Frecuentes
+            </h3>
+            <div class="space-y-4">
+          <details class="bg-gray-100 p-4 rounded-lg shadow">
+              <summary class="text-xl font-semibold text-gray-800 cursor-pointer">
+            ¿Cómo puedo personalizar mi sitio web?
+              </summary>
+              <p class="mt-2 text-gray-600">
+            EasySite te permite ajustar colores, fuentes e imágenes para reflejar la identidad de tu marca de manera sencilla.
+              </p>
+          </details>
+          <details class="bg-gray-100 p-4 rounded-lg shadow">
+              <summary class="text-xl font-semibold text-gray-800 cursor-pointer">
+            ¿Es posible gestionar citas a través de EasySite?
+              </summary>
+              <p class="mt-2 text-gray-600">
+            Sí, puedes configurar tu calendario y permitir que tus clientes agenden citas fácilmente según tu disponibilidad.
+              </p>
+          </details>
+          <details class="bg-gray-100 p-4 rounded-lg shadow">
+              <summary class="text-xl font-semibold text-gray-800 cursor-pointer">
+            ¿Cómo administro mis productos en el sitio?
+              </summary>
+              <p class="mt-2 text-gray-600">
+            Puedes agregar, editar y organizar tus productos con descripciones detalladas e imágenes atractivas desde el panel de administración.
+              </p>
+          </details>
+          <!-- Agrega más preguntas y respuestas según sea necesario -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white shadow mt-12">
+        <div class="container mx-auto px-4 py-6 text-center">
+            <p class="text-gray-600">&copy; 2023 EasySite. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
