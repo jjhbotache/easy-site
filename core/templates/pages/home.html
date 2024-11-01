@@ -12,6 +12,8 @@
 
 <main class="flex flex-col flex-1 bg-bg">
     <!-- Carrusel de Productos -->
+
+    {% if products %}
     <div class="relative">
         <div class="max-w-4xl mx-auto">
             <div id="slider" class="relative overflow-hidden rounded-lg shadow-lg">
@@ -49,12 +51,13 @@
             </div>
         </div>
     </div>
+    {% endif %}
 
     <!-- Sección Nosotros -->
     <section class="py-36 my-12 secondary-light-bg">
         <div class="container mx-auto max-w-screen-md ">
             <h2 class="text-3xl font-bold mb-6 text-center primary-dark-color">Nosotros</h2>
-            <p class="text-lg mb-8 text-center text-color">
+            <p class="text-lg mb-8 text-center text-color  px-4">
                 {{company.company_description}}
             </p>
             <a href="/nosotros" class="link block w-max mx-auto font-bold py-2 px-4 rounded transition duration-300 primary-bg secondary-light-color">

@@ -13,6 +13,7 @@
 <script type="module" src="{% static "js/helpers.js" %}"></script>
 {% endblock head %}
 
+{% if company.enable_appointments %}
 <main class="flex h-full flex-col bg-bg shadow-2xl">
     <!-- Encabezado -->
     <header class="bg-bg shadow-md p-4 h-auto">
@@ -95,6 +96,22 @@
         </div>
     </main>
 </main>
+{% else %}
+<main class="flex h-full flex-col bg-bg shadow-2xl">
+    <header class="bg-bg shadow-md p-4 h-auto">
+        <h1 class="text-2xl font-bold primary-dark-color flex flex-col items-start">
+            Calendario de citas
+        </h1>
+        <hr class="primary-border border mt-2">
+    </header>
+    <main class=" overflow-y-scroll scroll-hide">
+        <div class="p-4">
+            <h2 class="text-xl font-bold">Citas deshabilitadas</h2>
+            <p class="text-lg">Las citas están deshabilitadas en este momento.</p>
+        </div>
+    </main>
+</main>
+{% endif %}
 
 
 <!-- Modal para agregar evento -->

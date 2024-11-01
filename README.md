@@ -35,9 +35,10 @@
 - solve bugs:
    - ~~can`t schedule an appointment in the last time colinding with the resthours~~
 
-- turn off/on calendar function from django panel
-- check responsiveness of all pages
-- create easy site landing page
+- ~~Turn off/on calendar function from django panel~~
+- ~~Check responsiveness of all pages~~
+- Create easy site landing page
+- migrate db to postgres supabase
 
 
 ### **Estructura General del Proyecto**

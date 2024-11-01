@@ -7,12 +7,12 @@
 {% endblock %}
 
 {% block content %}
-<main class="flex flex-col flex-1 bg-bg">
+<main class="flex flex-col flex-1 bg-bg relative gap-36 pt-7">
     <!-- Sección Nosotros -->
-    <section class="relative py-36">
-        <div class="absolute inset-0">
-            <img src="{{ company.logo_large.url }}" alt="{{ company.name }}" class="w-full h-full object-cover opacity-20">
-        </div>
+    <div class="absolute inset-0 h-full flex items-center">
+        <img src="{{ company.logo_large.url }}" alt="{{ company.name }}" class=" w-full box-border px-2 object-cover opacity-20">
+    </div>
+    <section class="">
         <div class="container mx-auto px-4 relative z-10">
             <h2 class="text-3xl font-bold mb-6 text-center text-color">Nosotros</h2>
             <p class="text-lg mb-8 text-center text-color">
@@ -23,5 +23,18 @@
             </a>
         </div>
     </section>
+    <section class="relative pb-36">
+        <div class="container mx-auto px-4 relative z-10">
+            <h2 class="text-3xl font-bold mb-6 text-center text-color">Nuestro Producto</h2>
+            <p class="text-lg mb-8 text-center text-color">
+                {{ company.product_description }}
+            </p>
+            <a href="/catalogo" class="link w-max mx-auto font-bold py-2 px-4 rounded transition duration-300 primary-bg bg-color flex items-center justify-center">
+                <span class="material-symbols-outlined bg-color"> shopping_cart </span>
+                Ver Catálogo
+            </a>
+        </div>
+    </section>
+
 </main>
 {% endblock content %}
