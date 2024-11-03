@@ -11,10 +11,6 @@ class User(AbstractUser):
   is_company_admin = models.BooleanField(default=True)
   is_staff = models.BooleanField(default=True)
   
-  def save(self, *args, **kwargs):
-      print(self.password, end=' -> ')
-      self.password = make_password(self.password)
-      super().save(*args, **kwargs)
 
 
 def default_off_hours():return [12, 13, 14]

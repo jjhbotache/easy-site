@@ -50,7 +50,7 @@ ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
-AUTH_USER_MODEL = 'core.User'
+
 INSTALLED_APPS = [
     *new_apps,
     'django.contrib.admin',
@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -172,3 +173,4 @@ FRONT_URL =  os.getenv('FRONT_URL', 'http://127.0.0.1:8000')
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
+AUTH_USER_MODEL = 'core.User'
