@@ -16,6 +16,7 @@ import cloudinary.uploader
 import cloudinary.api
 from dotenv import load_dotenv
 from pathlib import Path
+import dj_database_url
 
 load_dotenv()
 
@@ -109,18 +110,22 @@ WSGI_APPLICATION = 'easy_site.wsgi.application'
 # settings.py
 # Print database configuration for debugging
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB'),
-        'USER': os.getenv('POSTGRES_USER'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-        'HOST': os.getenv('POSTGRES_HOST'),
-        'PORT': os.getenv('POSTGRES_PORT'),
-        'CONN_MAX_AGE': 600,
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.getenv('POSTGRES_DB'),
+#         'USER': os.getenv('POSTGRES_USER'),
+#         'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+#         'HOST': os.getenv('POSTGRES_HOST'),
+#         'PORT': os.getenv('POSTGRES_PORT'),
+#         'CONN_MAX_AGE': 600,
+#     }
+# }
 
+
+DATABASES = {
+    'default': dj_database_url.config(default=os.getenv('POSTGRES_URL'),conn_max_age=600)
+}
 
 
 # Password validation
