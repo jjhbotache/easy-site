@@ -10,3 +10,4 @@ pytz
 requests
 cloudinary
 django-cloudinary-storage
+psycopg2-binary
