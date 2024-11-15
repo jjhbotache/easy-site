@@ -9,6 +9,7 @@ from django.utils.timezone import make_aware, is_aware, now
 from cloudinary.models import CloudinaryField
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from django.urls import clear_url_caches
 
 class User(AbstractUser):
   is_company_admin = models.BooleanField(default=True)
