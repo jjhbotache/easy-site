@@ -37,8 +37,11 @@
 
 - ~~Turn off/on calendar function from django panel~~
 - ~~Check responsiveness of all pages~~
-- Create easy site landing page
-- migrate db to postgres supabase 
+- ~~Create easy site landing page~~
+- ~~migrate db to postgres supabase ~~
+- solve appointments bug
+- fix colors
+- new layout when 1 or 2 products
 
 
 ### **Estructura General del Proyecto**
