@@ -1,10 +1,9 @@
 import uuid
 from pytz import timezone
 from django.contrib.auth.models import AbstractUser
-from django.contrib.auth.hashers import make_password
 from django.core.validators import FileExtensionValidator, EmailValidator, RegexValidator
 from django.db import models
-from django.forms import DateTimeField, ValidationError
+from django.forms import  ValidationError
 from django.utils.timezone import make_aware, is_aware, now
 from cloudinary.models import CloudinaryField
 from django.dispatch import receiver
@@ -28,8 +27,8 @@ class Company(models.Model):
     primary_color = models.CharField(max_length=7, help_text="The color in hexadesimal (darker)")
     secondary_color = models.CharField(max_length=7, help_text="The color in hexadesimal (lighter)")
     # media
-    logo_small = CloudinaryField('image', validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'svg'])], help_text="The logo of the company (small size and dark)")
-    logo_large = CloudinaryField('image', validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'svg'])])
+    logo_small = CloudinaryField('image', help_text="The logo of the company (small size and dark)")
+    logo_large = CloudinaryField('image')
     # company data
     country_utc_offset = models.IntegerField(default=-5,help_text="The UTC offset of the country of the company (colombia is -5)")
     location = models.CharField(max_length=255)

@@ -9,8 +9,8 @@ from django.utils.dateparse import parse_datetime
 from .models import Appointment, Company
 import json
 
-def home(request):
-    company = company_from_request(request)
+def home(request, company_name):
+    company = get_object_or_404(Company, name=company_name)
     
     colors = {
         "background_color": company.background_color,
@@ -19,14 +19,15 @@ def home(request):
         "secondary_color": get_color_variations(company.secondary_color)
     }
     
+    
     return render(request, 'pages/home.html', {
         "company": company,
         "colors": colors,
         "products": Product.objects.filter(company=company)
     })
 
-def catalog(request):
-    company = company_from_request(request)
+def catalog(request, company_name):
+    company = get_object_or_404(Company, name=company_name)
     
     colors = {
         "background_color": company.background_color,
@@ -41,8 +42,8 @@ def catalog(request):
         "products": Product.objects.filter(company=company)
     })
 
-def us(request):
-    company = company_from_request(request)
+def us(request, company_name):
+    company = get_object_or_404(Company, name=company_name)
     
     colors = {
         "background_color": company.background_color,
@@ -56,8 +57,8 @@ def us(request):
         "colors": colors
     })
 
-def contact(request):
-    company = company_from_request(request)
+def contact(request, company_name):
+    company = get_object_or_404(Company, name=company_name)
     
     colors = {
         "background_color": company.background_color,
@@ -71,8 +72,8 @@ def contact(request):
         "colors": colors
     })
 
-def product_detail(request, product_id):
-    company = company_from_request(request)
+def product_detail(request, company_name, product_id):
+    company = get_object_or_404(Company, name=company_name)
     product = get_object_or_404(Product, id=product_id, company=company)
     
     colors = {
@@ -95,7 +96,7 @@ def product_detail(request, product_id):
         "related_products": related_products,
     })
 
-def calendar_view(request):
+def calendar_view(request, company_name):
     """
     Renders the calendar view for the company.
     This view performs the following actions:
@@ -116,7 +117,7 @@ def calendar_view(request):
     Returns:
         HttpResponse: The rendered calendar page with the context including appointments, company, colors, and calendar configuration.
     """
-    company = company_from_request(request)
+    company = get_object_or_404(Company, name=company_name)
     appointments = list(Appointment.objects.filter(company=company).values())
     colors = {
         "background_color": company.background_color,
@@ -154,10 +155,10 @@ def calendar_view(request):
         "is_admin": is_admin
     })
     
-def contact_through_mail(request):
+def contact_through_mail(request, company_name):
     print('contact_through_mail')
     print(request)
-    company = company_from_request(request)
+    company = get_object_or_404(Company, name=company_name)
     colors = {
         "background_color": company.background_color,
         "text_color": company.text_color,
@@ -194,7 +195,8 @@ def contact_through_mail(request):
 # functon routes
 
 
-def create_appointment(request):
+def create_appointment(request, company_name):
+    company = get_object_or_404(Company, name=company_name)
     if request.method == 'POST':
         # verify recaptcha
         token = request.POST.get('g-recaptcha-response')
@@ -237,8 +239,8 @@ def create_appointment(request):
     else:
         return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
 
-def cancel_appointment(request, token):
-    
+def cancel_appointment(request, company_name, token):
+    company = get_object_or_404(Company, name=company_name)
     data = json.loads(request.body) if request.body else {}
     data["cancel_token"] = token
     delete_appointment_logic(

@@ -8,4 +8,6 @@ from .models import Company
 
 companies = [company.name for company in Company.objects.all()]
 urlpatterns = generate_company_patterns(companies) + [
+    path('admin/', admin.site.urls),
+    # Add other static URL patterns here if needed
 ]

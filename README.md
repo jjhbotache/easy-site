@@ -39,8 +39,11 @@
 - ~~Check responsiveness of all pages~~
 - ~~Create easy site landing page~~
 - ~~migrate db to postgres supabase ~~
-- solve appointments bug
 - fix colors
+- make better descriptions
+- add defaults in company things
+- solve appointments bug
+- solve company name bug
 - new layout when 1 or 2 products
 
 
