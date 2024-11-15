@@ -7,6 +7,8 @@ from django.db import models
 from django.forms import DateTimeField, ValidationError
 from django.utils.timezone import make_aware, is_aware, now
 from cloudinary.models import CloudinaryField
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 class User(AbstractUser):
   is_company_admin = models.BooleanField(default=True)
@@ -59,6 +61,18 @@ class Company(models.Model):
 
     def __str__(self):
         return self.name
+
+@receiver(post_save, sender=Company)
+def update_company_urls(sender, instance, **kwargs):
+    from django.conf import settings
+    from django.urls import get_resolver
+    from .dynamic_router import generate_company_patterns
+
+    companies = [company.name for company in Company.objects.all()]
+    patterns = generate_company_patterns(companies)
+    resolver = get_resolver()
+    resolver.url_patterns = patterns
+    clear_url_caches()
 
 class Product(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='products')
