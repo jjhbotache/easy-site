@@ -1,4 +1,7 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from .models import User
+
 from .models import Company, Product, User,Appointment
 
 class ProductAdmin(admin.ModelAdmin):
@@ -75,7 +78,7 @@ class AppointmentAdmin(admin.ModelAdmin):
             form.base_fields.pop('company', None)  # Remover el campo 'company'
         return form
 
-admin.site.register(User)
+admin.site.register(User, UserAdmin)
 admin.site.register(Company, CompanyAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Appointment, AppointmentAdmin)
