@@ -30,7 +30,7 @@ cloudinary.config(
 
 new_apps = [
     'core',
-    "cloudinary", "cloudinary_storage"
+    "cloudinary_storage"
 ]
 
 
@@ -177,5 +177,11 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 FRONT_URL =  os.getenv('FRONT_URL', 'http://127.0.0.1:8000')
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
+}
 
 AUTH_USER_MODEL = 'core.User'

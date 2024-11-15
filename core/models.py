@@ -6,6 +6,7 @@ from django.core.validators import FileExtensionValidator, EmailValidator, Regex
 from django.db import models
 from django.forms import DateTimeField, ValidationError
 from django.utils.timezone import make_aware, is_aware, now
+from cloudinary.models import CloudinaryField
 
 class User(AbstractUser):
   is_company_admin = models.BooleanField(default=True)
@@ -24,8 +25,8 @@ class Company(models.Model):
     primary_color = models.CharField(max_length=7, help_text="The color in hexadesimal (darker)")
     secondary_color = models.CharField(max_length=7, help_text="The color in hexadesimal (lighter)")
     # media
-    logo_small = models.ImageField(upload_to='logos/small/', validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'svg'])], help_text="The logo of the company (small size and dark)")
-    logo_large = models.ImageField(upload_to='logos/large/', validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'svg'])])
+    logo_small = CloudinaryField('image', validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'svg'])], help_text="The logo of the company (small size and dark)")
+    logo_large = CloudinaryField('image', validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'svg'])])
     # company data
     country_utc_offset = models.IntegerField(default=-5,help_text="The UTC offset of the country of the company (colombia is -5)")
     location = models.CharField(max_length=255)
@@ -65,7 +66,7 @@ class Product(models.Model):
     description = models.TextField()
     features = models.TextField( help_text="The features of the product. Separate each feature with a comma.")
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    image = models.ImageField(upload_to='products/', help_text="The image of the product (horizontal orientation with main part at the right))", validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'svg'])])
+    image = CloudinaryField('image', help_text="The image of the product (horizontal orientation with main part at the right))", validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'svg'])])
 
     def __str__(self):
         return f"{self.name} - {self.company}"
@@ -141,4 +142,3 @@ class Appointment(models.Model):
     def save(self, *args, **kwargs):
         self.full_clean()  # Llama a clean() y valida el modelo antes de guardar
         super().save(*args, **kwargs)
-    
