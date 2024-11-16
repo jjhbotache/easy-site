@@ -39,8 +39,13 @@ def send_gmail(recipient_email, subject, body):
         print(f"Error al enviar el correo: {e}")
 
 def company_from_request(request):
-    company_text = get_company_name_from_url(request.get_full_path())
-    company = Company.objects.filter(name__icontains=company_text).order_by('name')[0]
+    try:
+        company_name = get_company_name_from_url(request.path)
+    except:
+        company_name = request.GET.get('company_name')
+    print(f"Company name: {company_name}")
+    
+    company = Company.objects.filter(name__icontains=company_name).order_by('name')[0]
     return company
 
 def verify_recaptcha(token):

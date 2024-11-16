@@ -1,32 +1,32 @@
 
 /* dark mode */ 
 
-html.dark .primary-bg{background: var(--secondary) !important;}
-html.dark .secondary-bg{background: var(--primary) !important;}
+html.dark .primary-bg{background: var(--primary-dark) !important;}
+html.dark .secondary-bg{background: var(--secondary-dark) !important;}
 html.dark .text-color-bg{background: var(--bg) !important;}
 html.dark .bg-bg{background: var(--text) !important;}
 
-html.dark .primary-color{color:  var(--secondary-dark);}
-html.dark .secondary-color{color:  var(--primary-dark);}
+html.dark .primary-color{color:  var(--primary-dark);}
+html.dark .secondary-color{color:  var(--secondary-dark);}
 html.dark .text-color{color:  var(--bg);}
 html.dark .bg-color{color:  var(--text);}
 
-html.dark .primary-light-bg{background: var(--secondary-dark) !important;}
-html.dark .primary-dark-bg{background: var(--secondary-light) !important;}
-html.dark .secondary-light-bg{background: var(--primary-dark) !important;}
-html.dark .secondary-dark-bg{background: var(--primary-light) !important;}
+html.dark .primary-light-bg{background: var(--primary-dark) !important;}
+html.dark .primary-dark-bg{background: var(--primary-light) !important;}
+html.dark .secondary-light-bg{background: var(--secondary-dark) !important;}
+html.dark .secondary-dark-bg{background: var(--secondary-light) !important;}
 
-html.dark .primary-light-color{color:  var(--secondary-dark);}
-html.dark .primary-dark-color{color:  var(--secondary-light);}
-html.dark .secondary-light-color{color:  var(--primary-dark);}
-html.dark .secondary-dark-color{color:  var(--primary-light);}
+html.dark .primary-light-color{color:  var(--primary-dark);}
+html.dark .primary-dark-color{color:  var(--primary-light);}
+html.dark .secondary-light-color{color:  var(--secondary-dark);}
+html.dark .secondary-dark-color{color:  var(--secondary-light);}
 
-html.dark .primary-border{border-color: var(--secondary) !important;}
-html.dark .secondary-border{border-color: var(--primary) !important;}
-html.dark .primary-dark-border{border-color: var(--secondary-dark) !important;}
-html.dark .secondary-dark-border{border-color: var(--primary-dark) !important;}
-html.dark .primary-light-border{border-color: var(--secondary-light) !important;}
-html.dark .secondary-light-border{border-color: var(--primary-light) !important;}
+html.dark .primary-border{border-color: var(--primary-dark) !important;}
+html.dark .secondary-border{border-color: var(--secondary-dark) !important;}
+html.dark .primary-dark-border{border-color: var(--primary-light) !important;}
+html.dark .secondary-dark-border{border-color: var(--secondary-light) !important;}
+html.dark .primary-light-border{border-color: var(--primary-dark) !important;}
+html.dark .secondary-light-border{border-color: var(--secondary-dark) !important;}
 html.dark .text-border{border-color: var(--bg) !important;}
 html.dark .bg-border{border-color: var(--text) !important;}
 
@@ -45,6 +45,7 @@ html:not(.dark) .primary-color{color:  var(--primary);}
 html:not(.dark) .secondary-color{color:  var(--secondary);}
 html:not(.dark) .text-color{color: var(--text);}
 html:not(.dark) .bg-color{color: var(--bg);}
+
 
 html:not(.dark) .primary-light-bg{background: var(--primary-light) !important;}
 html:not(.dark) .primary-dark-bg{background: var(--primary-dark) !important;}
@@ -108,12 +109,12 @@ svg{
 
 /* navbar */
 html.dark .navbar__link:hover {
-    color: var(--secondary-light) !important;
+    /* color: var(--secondary-light) !important; */
     transform: scale(1.05);
 }
 
 html:not(.dark) .navbar__link:hover {
-    color: var(--primary) !important;
+    /* color: var(--primary) !important; */
     transform: scale(1.05);
 }
 

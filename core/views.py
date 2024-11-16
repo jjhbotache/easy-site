@@ -9,17 +9,17 @@ from django.utils.dateparse import parse_datetime
 from .models import Appointment, Company
 import json
 
-def home(request, company_name):
-    company = get_object_or_404(Company, name=company_name)
-    
-    colors = {
+def get_colors(company):
+    return {
         "background_color": company.background_color,
         "text_color": company.text_color,
         "primary_color": get_color_variations(company.primary_color),
         "secondary_color": get_color_variations(company.secondary_color)
     }
-    
-    
+
+def home(request, company_name):
+    company = get_object_or_404(Company, name=company_name)
+    colors = get_colors(company)
     return render(request, 'pages/home.html', {
         "company": company,
         "colors": colors,
@@ -28,14 +28,7 @@ def home(request, company_name):
 
 def catalog(request, company_name):
     company = get_object_or_404(Company, name=company_name)
-    
-    colors = {
-        "background_color": company.background_color,
-        "text_color": company.text_color,
-        "primary_color": get_color_variations(company.primary_color),
-        "secondary_color": get_color_variations(company.secondary_color)
-    }
-    
+    colors = get_colors(company)
     return render(request, 'pages/catalog.html', {
         "company": company,
         "colors": colors,
@@ -44,14 +37,7 @@ def catalog(request, company_name):
 
 def us(request, company_name):
     company = get_object_or_404(Company, name=company_name)
-    
-    colors = {
-        "background_color": company.background_color,
-        "text_color": company.text_color,
-        "primary_color": get_color_variations(company.primary_color),
-        "secondary_color": get_color_variations(company.secondary_color)
-    }
-    
+    colors = get_colors(company)
     return render(request, 'pages/us.html', {
         "company": company,
         "colors": colors
@@ -59,14 +45,7 @@ def us(request, company_name):
 
 def contact(request, company_name):
     company = get_object_or_404(Company, name=company_name)
-    
-    colors = {
-        "background_color": company.background_color,
-        "text_color": company.text_color,
-        "primary_color": get_color_variations(company.primary_color),
-        "secondary_color": get_color_variations(company.secondary_color)
-    }
-    
+    colors = get_colors(company)
     return render(request, 'pages/contact.html', {
         "company": company,
         "colors": colors
@@ -75,20 +54,10 @@ def contact(request, company_name):
 def product_detail(request, company_name, product_id):
     company = get_object_or_404(Company, name=company_name)
     product = get_object_or_404(Product, id=product_id, company=company)
-    
-    colors = {
-        "background_color": company.background_color,
-        "text_color": company.text_color,
-        "primary_color": get_color_variations(company.primary_color),
-        "secondary_color": get_color_variations(company.secondary_color)
-    }
-    
-    # treatment of product data
-    product.features = [f.strip() for f in product.features.split(',')]
+    colors = get_colors(company)
+    product.features = [f.strip() for f in product.features.split(',') ]
     product.price = f"{round(product.price*1000):,}".replace(",", ".")
     related_products = Product.objects.filter(company=company).exclude(id=product_id)
-    
-    
     return render(request, 'pages/product.html', {
         "company": company,
         "colors": colors,
@@ -119,12 +88,8 @@ def calendar_view(request, company_name):
     """
     company = get_object_or_404(Company, name=company_name)
     appointments = list(Appointment.objects.filter(company=company).values())
-    colors = {
-        "background_color": company.background_color,
-        "text_color": company.text_color,
-        "primary_color": get_color_variations(company.primary_color),
-        "secondary_color": get_color_variations(company.secondary_color)
-    }
+    colors = get_colors(company)
+    
     calendar_config = {
         "appointment_duration": company.appointment_duration,
         "appointment_start_time": company.appointment_start_time,
@@ -132,21 +97,15 @@ def calendar_view(request, company_name):
         "off_hours": company.off_hours,
         "off_days_of_the_week": company.off_days_of_the_week
     }
-    
-    # identify if the user is an admin
+    print(calendar_config)
     is_admin = request.user.is_authenticated
-    
     if not is_admin:
-        # only left the fields that are needed for the user
         appointments = [ {
                 "id": appointment["id"],
                 "start_datetime": appointment["start_datetime"],
                 "end_datetime": appointment["end_datetime"],
             } for appointment in appointments ]
         
-            
-    
-    print(is_admin)
     return render(request, 'pages/calendar.html', {
         'appointments': appointments,
         "company": company,
@@ -159,12 +118,7 @@ def contact_through_mail(request, company_name):
     print('contact_through_mail')
     print(request)
     company = get_object_or_404(Company, name=company_name)
-    colors = {
-        "background_color": company.background_color,
-        "text_color": company.text_color,
-        "primary_color": get_color_variations(company.primary_color),
-        "secondary_color": get_color_variations(company.secondary_color)
-    }
+    colors = get_colors(company)
     
     if request.method == 'POST':
         # Leer datos enviados con POST

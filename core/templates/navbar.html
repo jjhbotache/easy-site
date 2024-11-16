@@ -1,6 +1,6 @@
 <!-- components/navbar.html -->
 
-<nav class="shadow-lg h-auto flex secondary-light-bg sticky top-0 z-20">
+<nav class="shadow-lg h-auto flex primary-light-bg sticky top-0 z-20">
   <div class="flex justify-between w-full">
     <div class="flex space-x-7">
       <div>
@@ -17,33 +17,33 @@
       <div class="hidden md:flex items-center gap-2">
         <a
           href="/"
-          class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300 text-color"
+          class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300 text-light-color "
           >Inicio</a
         >
         <a
           href="/nosotros"
-          class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300 text-color"
+          class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300 text-light-color "
           >Nosotros</a
         >
         <a
           href="/catalogo"
-          class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300 text-color"
+          class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300 text-light-color "
           >Catálogo</a
         >
         <a
           href="/contacto"
-          class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300 text-color"
+          class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300 text-light-color "
           >Contacto</a
         >
         {% if company.enable_appointments %}
         <a
           href="/calendario"
-          class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300 text-color"
+          class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300 text-light-color "
           >Calendario</a
         >
         {% endif %}
         <button
-          class="theme-toggle outline-none px-4 py-2 secondary-bg text-color rounded-full"
+          class="theme-toggle outline-none px-4 py-2 primary-dark-bg primary-light-color rounded-full"
         ></button>
       </div>
     </div>
@@ -51,11 +51,11 @@
     <!-- Botón de menú hamburguesa para pantallas pequeñas -->
     <div class="md:hidden flex items-center gap-2 mr-2">
       <button
-        class="theme-toggle outline-none px-4 py-2 secondary-bg text-color rounded-full"
+        class="theme-toggle outline-none px-4 py-2 secondary-bg text-light-color rounded-full"
       ></button>
       <button id="menu-button" class="outline-none">
         <svg
-          class="w-6 h-6 text-color hover:text-gray-600"
+          class="w-6 h-6 text-light-color hover:text-gray-600"
           fill="none"
           stroke-linecap="round"
           stroke-linejoin="round"
@@ -77,28 +77,28 @@
       <li>
         <a
           href="/"
-          class="navbar__link link block text-sm px-2 py-4 secondary-light-bg transition duration-300 text-color"
+          class="navbar__link link block text-sm px-2 py-4 secondary-light-bg transition duration-300 text-light-color"
           >Inicio</a
         >
       </li>
       <li>
         <a
           href="/nosotros"
-          class="navbar__link link block text-sm px-2 py-4 secondary-light-bg transition duration-300 text-color"
+          class="navbar__link link block text-sm px-2 py-4 secondary-light-bg transition duration-300 text-light-color"
           >Nosotros</a
         >
       </li>
       <li>
         <a
           href="/catalogo"
-          class="navbar__link link block text-sm px-2 py-4 secondary-light-bg transition duration-300 text-color"
+          class="navbar__link link block text-sm px-2 py-4 secondary-light-bg transition duration-300 text-light-color"
           >Catálogo</a
         >
       </li>
       <li>
         <a
           href="/contacto"
-          class="navbar__link link block text-sm px-2 py-4 secondary-light-bg transition duration-300 text-color"
+          class="navbar__link link block text-sm px-2 py-4 secondary-light-bg transition duration-300 text-light-color"
           >Contacto</a
         >
       </li>
@@ -106,7 +106,7 @@
       <li>
         <a
           href="/calendario"
-          class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300 text-color"
+          class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300 text-light-color"
           >Calendario</a
         >
       </li>

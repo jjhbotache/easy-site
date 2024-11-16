@@ -73,7 +73,7 @@ def get_color_variations(hex_color, adjustment_percentage=0.3):
     """
     Dado un color en formato hexadecimal, devuelve un diccionario con el color original,
     una versión más clara y una versión más oscura. 
-    El ajuste se hace en base a un porcentaje dado (por defecto 20%).
+    El ajuste se hace en base a un porcentaje dado (por defecto 50%).
     
     Parámetros:
     - hex_color: (str) Color en formato hexadecimal (#rrggbb).

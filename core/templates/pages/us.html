@@ -9,12 +9,12 @@
 {% block content %}
 <main class="flex flex-col flex-1 bg-bg relative gap-36 pt-7">
     <!-- Sección Nosotros -->
-    <div class="absolute inset-0 h-full flex items-center">
+    <div class="absolute inset-0 h-full flex items-center overflow-hidden">
         <img src="{{ company.logo_large.url }}" alt="{{ company.name }}" class=" w-full box-border px-2 object-cover opacity-20">
     </div>
     <section class="">
         <div class="container mx-auto px-4 relative z-10">
-            <h2 class="text-3xl font-bold mb-6 text-center text-color">Nosotros</h2>
+            <h2 class="text-3xl font-bold mb-6 text-center secondary-color">Nosotros</h2>
             <p class="text-lg mb-8 text-center text-color">
                 {{ company.company_description }}
             </p>
@@ -25,7 +25,7 @@
     </section>
     <section class="relative pb-36">
         <div class="container mx-auto px-4 relative z-10">
-            <h2 class="text-3xl font-bold mb-6 text-center text-color">Nuestro Producto</h2>
+            <h2 class="text-3xl font-bold mb-6 text-center primary-color">Nuestro Producto</h2>
             <p class="text-lg mb-8 text-center text-color">
                 {{ company.product_description }}
             </p>

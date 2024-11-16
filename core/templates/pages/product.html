@@ -16,7 +16,7 @@
         <div class="flex flex-col gap-8 flex-1 max-w-md">
 
           <div class="flex flex-col gap-4">
-            <h1 class="font-bold text-4xl leading-9 md:text-6xl primary-dark-color">{{ product.name }}</h1>
+            <h1 class="font-bold text-4xl leading-9 md:text-6xl secondary-color">{{ product.name }}</h1>
             <div class="flex flex-col gap-4 text-sm leading-loose md:text-base md:leading-6 primary-dark-color">
               <p>{{ product.description }}</p>
             </div>
@@ -54,7 +54,7 @@
 
 <!-- products general info -->
 
-<section class="general-info-section pt-20 pb-40 mt-16 px-4 secondary-light-bg w-full">
+<section class="general-info-section py-20  mt-16 px-4 secondary-light-bg w-full">
   <div class=" mx-auto max-w-screen-md text-center">
     <div class="text-2xl font-thin ">
       {{ company.general_data_for_products }}
@@ -62,36 +62,17 @@
   </div>
 </section>
 
-<!-- ribbon -->
-<svg  style="transform:rotate(0deg); transition: 0.3s" viewBox="0 0 1440 170" version="1.1" xmlns="http://www.w3.org/2000/svg" class="-mt-40 wave">
-  <defs>
-    <linearGradient id="sw-gradient-0" x1="0" x2="0" y1="1" y2="0">
-      <stop stop-color="var(--primary-dark)" offset="20%"></stop>
-      <stop stop-color="var(--primary-light)" offset="80%"></stop>
-    </linearGradient>
-  </defs>
-  <path style="transform:translate(0, 0px); opacity:1" fill="url(#sw-gradient-0)" d="M0,68L40,73.7C80,79,160,91,240,85C320,79,400,57,480,62.3C560,68,640,102,720,107.7C800,113,880,91,960,93.5C1040,96,1120,125,1200,136C1280,147,1360,142,1440,119C1520,96,1600,57,1680,39.7C1760,23,1840,28,1920,42.5C2000,57,2080,79,2160,99.2C2240,119,2320,136,2400,124.7C2480,113,2560,74,2640,68C2720,62,2800,91,2880,104.8C2960,119,3040,119,3120,107.7C3200,96,3280,74,3360,79.3C3440,85,3520,119,3600,116.2C3680,113,3760,74,3840,65.2C3920,57,4000,79,4080,79.3C4160,79,4240,57,4320,45.3C4400,34,4480,34,4560,39.7C4640,45,4720,57,4800,73.7C4880,91,4960,113,5040,107.7C5120,102,5200,68,5280,70.8C5360,74,5440,113,5520,116.2C5600,119,5680,85,5720,68L5760,51L5760,170L5720,170C5680,170,5600,170,5520,170C5440,170,5360,170,5280,170C5200,170,5120,170,5040,170C4960,170,4880,170,4800,170C4720,170,4640,170,4560,170C4480,170,4400,170,4320,170C4240,170,4160,170,4080,170C4000,170,3920,170,3840,170C3760,170,3680,170,3600,170C3520,170,3440,170,3360,170C3280,170,3200,170,3120,170C3040,170,2960,170,2880,170C2800,170,2720,170,2640,170C2560,170,2480,170,2400,170C2320,170,2240,170,2160,170C2080,170,2000,170,1920,170C1840,170,1760,170,1680,170C1600,170,1520,170,1440,170C1360,170,1280,170,1200,170C1120,170,1040,170,960,170C880,170,800,170,720,170C640,170,560,170,480,170C400,170,320,170,240,170C160,170,80,170,40,170L0,170Z"></path>
-</svg>
-<svg  style="transform:rotate(180deg); transition: 0.3s" viewBox="0 0 1440 170" version="1.1" xmlns="http://www.w3.org/2000/svg" class="-mt-1 wave">
-  <defs>
-    <linearGradient id="sw-gradient-1" x1="0" x2="0" y1="1" y2="0">
-      <stop stop-color="var(--primary-dark)" offset="20%"></stop>
-      <stop stop-color="var(--primary-light)" offset="80%"></stop>
-    </linearGradient>
-  </defs>
-  <path style="transform:translate(0, 0px); opacity:1" fill="url(#sw-gradient-1)" d="M0,51L40,56.7C80,62,160,74,240,68C320,62,400,40,480,39.7C560,40,640,62,720,82.2C800,102,880,119,960,107.7C1040,96,1120,57,1200,42.5C1280,28,1360,40,1440,53.8C1520,68,1600,85,1680,79.3C1760,74,1840,45,1920,28.3C2000,11,2080,6,2160,22.7C2240,40,2320,79,2400,99.2C2480,119,2560,119,2640,99.2C2720,79,2800,40,2880,28.3C2960,17,3040,34,3120,39.7C3200,45,3280,40,3360,45.3C3440,51,3520,68,3600,85C3680,102,3760,119,3840,127.5C3920,136,4000,136,4080,116.2C4160,96,4240,57,4320,59.5C4400,62,4480,108,4560,104.8C4640,102,4720,51,4800,48.2C4880,45,4960,91,5040,113.3C5120,136,5200,136,5280,113.3C5360,91,5440,45,5520,25.5C5600,6,5680,11,5720,14.2L5760,17L5760,170L5720,170C5680,170,5600,170,5520,170C5440,170,5360,170,5280,170C5200,170,5120,170,5040,170C4960,170,4880,170,4800,170C4720,170,4640,170,4560,170C4480,170,4400,170,4320,170C4240,170,4160,170,4080,170C4000,170,3920,170,3840,170C3760,170,3680,170,3600,170C3520,170,3440,170,3360,170C3280,170,3200,170,3120,170C3040,170,2960,170,2880,170C2800,170,2720,170,2640,170C2560,170,2480,170,2400,170C2320,170,2240,170,2160,170C2080,170,2000,170,1920,170C1840,170,1760,170,1680,170C1600,170,1520,170,1440,170C1360,170,1280,170,1200,170C1120,170,1040,170,960,170C880,170,800,170,720,170C640,170,560,170,480,170C400,170,320,170,240,170C160,170,80,170,40,170L0,170Z"></path>
-</svg>
 
 <!-- other products -->
-<section class="py-36">
+<section class="py-20">
   <div class="container mx-auto px-4">
       <h2 class="text-3xl font-bold mb-6 text-center ">Más productos</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {% for related_product in related_products %}
           <a href="/producto/{{related_product.id}}" class="link p-6 rounded-lg shadow-md transition-all duration-150 hover:scale-110 transform hover:shadow-xl hover:cursor-pointer secondary-light-bg">
               <img src="{{ related_product.image.url }}" alt="{{ related_product.name }}" class="w-full h-48 object-cover mb-4 rounded hover:cursor-pointer">
-              <h3 class="text-xl font-bold mb-2">{{ related_product.name }}</h3>
-              <p class="primary-light-color">{{ related_product.description }}</p>
+              <h3 class="text-color text-xl font-bold mb-2">{{ related_product.name }}</h3>
+              <p class="text-color product-description">{{ related_product.description }}</p>
           </a>
           {% endfor %}
       </div>

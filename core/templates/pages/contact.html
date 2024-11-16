@@ -11,14 +11,14 @@
     <!-- Sección Contacto -->
     <section class="py-36 bg-bg">
         <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold mb-6 text-center">Contacto</h2>
+            <h2 class="text-3xl font-bold mb-6 text-center secondary-color">Contacto</h2>
             {% include "../contact_form.html" %}
             
             <!-- Botón de WhatsApp Condicional -->
             {% if company.whatsapp_number and company.whatsapp_message %}
             <h1 class="text-3xl font-bold my-12 text-center">ó</h1>
             <div class="flex justify-center mt-8">
-                <a href="https://wa.me/{{ company.whatsapp_number }}?text={{ company.whatsapp_message }}" class="flex items-center bg-green-500 text-white font-bold py-2 px-4 rounded-lg transition duration-300 hover:bg-green-600">
+                <a href="https://wa.me/{{ company.whatsapp_number }}?text={{ company.whatsapp_message }}" class="flex items-center secondary-bg bg-color font-bold py-2 px-4 rounded-lg">
                     <i class="fi fi-brands-whatsapp mr-2"></i> Contáctanos por WhatsApp
                 </a>
             </div>

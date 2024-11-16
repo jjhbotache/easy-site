@@ -11,8 +11,8 @@
 {% block content %}
 
 <main class="flex flex-col flex-1 bg-bg">
+    
     <!-- Carrusel de Productos -->
-
     {% if products %}
     <div class="relative">
         <div class="max-w-4xl mx-auto">
@@ -21,22 +21,22 @@
                     {% for product in products %}
                     <a href="/producto/{{product.id}}"  class="link w-full flex-shrink-0 relative grid place-items-center overflow-hidden transition-all duration-300 ease-out">
                         <img src="{{ product.image.url }}" alt="{{ product.name }}" class="slider__img -z-10">
-                        <div class="slider__data">   
-                            <div class="bg primary-bg"></div>
-                            <h2 class="relative text-xl font-bold secondary-light-color z-10">{{ product.name }}</h2>
-                            <p class="relative secondary-light-color z-10">{{ product.description }}</p>
+                        <div class="slider__data ">   
+                            <div class="bg primary-dark-bg"></div>
+                            <h2 class="relative text-xl font-bold bg-color z-10">{{ product.name }}</h2>
+                            <p class="relative bg-color z-10">{{ product.description }}</p>
                         </div>
                     </a>
                     {% endfor %}
                 </div>
 
                 <!-- Botones de navegación -->
-                <button id="prevBtn" class="absolute top-1/2 left-2 transform -translate-y-1/2 secondary-light-bg rounded-full p-2 transition-all duration-200 primary-color opacity-85 hover:transform-none ">
+                <button id="prevBtn" class="absolute top-1/2 left-2 transform -translate-y-1/2 primary-light-bg secondary-dark-color rounded-full p-2 transition-all duration-200 primary-color opacity-85 hover:transform-none ">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
                 </button>
-                <button id="nextBtn" class="absolute top-1/2 right-2 transform -translate-y-1/2 secondary-light-bg rounded-full p-2 transition-all duration-200 primary-color opacity-85 hover:transform-none ">
+                <button id="nextBtn" class="absolute top-1/2 right-2 transform -translate-y-1/2 primary-light-bg secondary-dark-color rounded-full p-2 transition-all duration-200 primary-color opacity-85 hover:transform-none ">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                     </svg>
@@ -45,7 +45,7 @@
                 <!-- Indicadores de paginación -->
                 <div id="pagination" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
                     {% for product in products %}
-                    <button class="w-3 h-3 rounded-full bg-opacity-50 hover:bg-opacity-100 transition-all duration-200 secondary-bg"></button>
+                    <button class="w-3 h-3 rounded-full bg-opacity-50 hover:bg-opacity-100 transition-all duration-200 secondary-light-bg"></button>
                     {% endfor %}
                 </div>
             </div>
@@ -54,21 +54,17 @@
     {% endif %}
 
     <!-- Sección Nosotros -->
-    <section class="py-36 my-12 secondary-light-bg">
+    <section class="py-36 my-12 primary-dark-bg">
         <div class="container mx-auto max-w-screen-md ">
-            <h2 class="text-3xl font-bold mb-6 text-center primary-dark-color">Nosotros</h2>
-            <p class="text-lg mb-8 text-center text-color  px-4">
-                {{company.company_description}}
-            </p>
-            <a href="/nosotros" class="link block w-max mx-auto font-bold py-2 px-4 rounded transition duration-300 primary-bg secondary-light-color">
-                Conoce más
-            </a>
+            <h2 class="text-3xl font-bold mb-6 text-center bg-color">Nosotros</h2>
+            <p class="text-lg mb-8 text-center bg-color px-4"> {{company.company_description}} </p>
+            <a href="/nosotros" class="link block w-max mx-auto font-bold py-2 px-4 rounded transition duration-300 primary-bg bg-color"> Conoce más </a>
         </div>
     </section>
 
     <!-- Sección Contacto -->
     <section class="py-3">
-        <h2 class="text-3xl font-bold mb-6 text-center primary-dark-color">Contacto</h2>
+        <h2 class="text-3xl font-bold mb-6 text-center text-color">Contacto</h2>
         {% include "../contact_form.html" %}
     </section>
 </main>

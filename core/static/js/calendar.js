@@ -4,7 +4,7 @@ import { myFetch, showAlert, DAYS_OF_WEEK, MONTHS_OF_YEAR, addDays, subtractDays
 // Elements
 const calendar_config = JSON.parse(document.getElementById('calendar_config').textContent, (key, value) => {
     if (key === 'appointment_start_time' || key === 'appointment_end_time') {
-        return parseInt(value.split(':')[0]);
+        return parseInt(value);
     }
     return value;
 });

@@ -39,12 +39,12 @@
 - ~~Check responsiveness of all pages~~
 - ~~Create easy site landing page~~
 - ~~migrate db to postgres supabase ~~
-- fix colors
-- make better descriptions
+- ~~fix colors~~
+- ~~solve calendar bug~~
+- ~~solve company name bug~~
+- solve navbar bug
+- make better descriptions for models
 - add defaults in company things
-- solve appointments bug
-- solve company name bug
-- new layout when 1 or 2 products
 
 
 ### **Estructura General del Proyecto**
