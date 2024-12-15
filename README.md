@@ -42,9 +42,10 @@
 - ~~fix colors~~
 - ~~solve calendar bug~~
 - ~~solve company name bug~~
-- solve navbar bug
-- make better descriptions for models
-- add defaults in company things
+- ~~make better descriptions for models~~
+- ~~add defaults in company things~~
+- solve navbar bug, doesn't keep on top until the end
+- fix colors compatibility with dark theme
 
 
 ### **Estructura General del Proyecto**
