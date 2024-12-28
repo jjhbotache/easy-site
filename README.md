@@ -44,8 +44,9 @@
 - ~~solve company name bug~~
 - ~~make better descriptions for models~~
 - ~~add defaults in company things~~
-- solve navbar bug, doesn't keep on top until the end
-- fix colors compatibility with dark theme
+- ~~solve navbar bug, doesn't keep on top until the end~~
+- ~~recheck conditional data~~ 
+- ~~fix colors compatibility with dark theme~~
 
 
 ### **Estructura General del Proyecto**

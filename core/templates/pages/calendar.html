@@ -18,13 +18,13 @@
     <!-- Encabezado -->
     <header class="bg-bg shadow-md p-4 h-auto">
         <div class="flex justify-between items-end">
-            <h1 class="text-2xl font-bold primary-color">
+            <h1 class="text-2xl font-bold text-color">
                 Calendario de citas
                 <div class="text-center font-bold text-xl py-2">
                     <span id="month">Enero</span>- <span id="year">2000</span> 
                 </div>
             </h1>
-            <button id="addEventBtn" class="p-2 primary-bg bg-color rounded-lg">
+            <button id="addEventBtn" class="p-2 primary-bg text-color rounded-lg">
                 <i class="fi fi-rr-plus"></i> Agendar cita
             </button>
         </div>
@@ -32,18 +32,18 @@
     </header>
 
     <!-- Contenido principal -->
-    <main class=" overflow-y-scroll scroll-hide">
+    <main class=" overflow-y-scroll scroll-hide text-color">
         <div id="calendar" class="grid grid-cols-4 gap-1 bg-bg p-4 pt-0" >
             <!-- firsts rows -->
             <div class="sticky top-0 bg-bg z-10">
                 <div class="flex justify-evenly items-center py-1 flex-wrap gap-1">
-                    <button id="todayBtn" class="py-1 px-1 primary-bg bg-color rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 active:bg-primary-dark active:ring-2 active:ring-primary active:ring-opacity-50 w-5/6 md:w-auto md:order-2 " title="Hoy">
+                    <button id="todayBtn" class="py-1 px-1 primary-bg text-color rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 active:bg-primary-dark active:ring-2 active:ring-primary active:ring-opacity-50 w-5/6 md:w-auto md:order-2 " title="Hoy">
                         Hoy
                     </button>
-                    <button id="prevDaysBtn" class="py-1 px-2 primary-bg bg-color rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 active:bg-primary-dark active:ring-2 active:ring-primary active:ring-opacity-50 md:order-1" title="Previo dia">
+                    <button id="prevDaysBtn" class="py-1 px-2 primary-bg text-color rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 active:bg-primary-dark active:ring-2 active:ring-primary active:ring-opacity-50 md:order-1" title="Previo dia">
                         <i class="fi fi-rr-angle-left"></i>
                     </button>
-                    <button id="nextDaysBtn" class="py-1 px-2 primary-bg bg-color rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 active:bg-primary-dark active:ring-2 active:ring-primary active:ring-opacity-50 md:order-3" title="Próximo dia">
+                    <button id="nextDaysBtn" class="py-1 px-2 primary-bg text-color rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 active:bg-primary-dark active:ring-2 active:ring-primary active:ring-opacity-50 md:order-3" title="Próximo dia">
                         <i class="fi fi-rr-angle-right"></i>
                     </button>
                 </div>
@@ -81,13 +81,13 @@
                 </div>
             </template>
             <template id="miniHourBoxBusy">
-                <div class="primary-bg bg-color secondary-border border flex-1 hover:scale-105 transition-all transform grid place-content-center h-4 text-xs">
+                <div class="primary-bg text-color secondary-border border flex-1 hover:scale-105 transition-all transform grid place-content-center h-4 text-xs">
                     busy
                 </div>
             </template>
             
             <template id="miniHourBoxOff">
-                <div class="primary-bg bg-color secondary-border border-dashed flex-1 cursor-not-allowed grid place-content-center h-4 text-xs opacity-10">
+                <div class="primary-bg text-color secondary-border border-dashed flex-1 cursor-not-allowed grid place-content-center h-4 text-xs opacity-10">
                     off
                 </div>
             </template>
@@ -98,7 +98,7 @@
 {% else %}
 <main class="flex h-full flex-col bg-bg shadow-2xl">
     <header class="bg-bg shadow-md p-4 h-auto">
-        <h1 class="text-2xl font-bold primary-dark-color flex flex-col items-start">
+        <h1 class="text-2xl font-bold text-color flex flex-col items-start">
             Calendario de citas
         </h1>
         <hr class="primary-border border mt-2">
@@ -114,7 +114,7 @@
 
 
 <!-- Modal para agregar evento -->
-<dialog id="eventModal" class="secondary-light-bg text-color p-8 rounded-lg shadow-xl  z-30 overflow-y-auto inset-0 w-full max-w-sm fixed ">
+<dialog id="eventModal" class="secondary-light-bg  p-8 rounded-lg shadow-xl  z-30 overflow-y-auto inset-0 w-full max-w-sm fixed ">
     <h2 class="text-2xl font-bold mb-4" id="modalTitle">Agregar Evento</h2>
     <form id="appointmentEditor">
         <input type="hidden" id="eventId" name="event_id">
@@ -152,21 +152,21 @@
                 data-callback='handleAppointmentSubmission' 
                 data-action='submit'
                 class="g-recaptcha
-                primary-bg bg-color hover:bg-primary-dark text-bg font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                primary-bg text-color hover:bg-primary-dark text-bg font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 >Guardar</button>
             {% else %}
             <button 
                 type="button"
                 onclick="handleAppointmentSubmission()"
-                class="primary-bg bg-color hover:bg-primary-dark text-bg font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                class="primary-bg text-color hover:bg-primary-dark text-bg font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 >Guardar</button>
             {% endif %}
             
 
-            <button type="button" id="deleteEventBtn" class="text-color border text-border font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline  justify-center items-center gap-1 hidden">
+            <button type="button" id="deleteEventBtn" class=" border text-border font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline  justify-center items-center gap-1 hidden">
                 <i class="fi fi-rr-trash"></i> <span class="hidden md:inline-block">Eliminar</span>
             </button>
-            <button type="button" id="closeModalBtn" class=" text-color border text-border font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Cerrar</button>
+            <button type="button" id="closeModalBtn" class="  border text-border font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Cerrar</button>
         </div>
         
     </form>

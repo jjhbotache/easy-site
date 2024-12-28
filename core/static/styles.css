@@ -66,6 +66,11 @@ html:not(.dark) .secondary-light-border{border-color: var(--secondary-light) !im
 html:not(.dark) .text-border{border-color: var(--text) !important;}
 html:not(.dark) .bg-border{border-color: var(--bg) !important;}
 
+html,body{
+    display: flex;
+    flex-direction: column;
+}
+
 
 /* tailwind override */
 *{
@@ -99,6 +104,7 @@ a:not([id]):hover {
 }
 svg{
     background: transparent;
+    color: transparent;
 }
 .scroll-hide {
     scrollbar-width: none;

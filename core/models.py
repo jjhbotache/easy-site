@@ -17,7 +17,7 @@ class User(AbstractUser):
 def default_off_hours():return [12, 13, 14]
 def default_off_days_of_the_week(): return [6,7]
 class Company(models.Model):
-    name = models.CharField(max_length=255, help_text=f"Nombre de la empresa. puedes acceder a tu web accediendo a ' {settings.FRONT_URL}/nombre de la empresa '.")
+    name = models.CharField(max_length=255,default="mi web", help_text=f"Nombre de la empresa. puedes acceder a tu web accediendo a ' {settings.FRONT_URL}/nombre de la empresa '.")
     company_description = models.TextField(blank=True, null=True, help_text="Descripción detallada de la empresa. Esta aparecerá en las páginas de 'inicio' y 'nosotros'.")
     # colores   
     background_color = models.CharField(max_length=7, default="ffffff,", help_text="Color de fondo en formato hexadecimal. Suele ser cercano a blanco (por ejemplo, #FFFFFF).")
@@ -25,11 +25,11 @@ class Company(models.Model):
     primary_color = models.CharField(max_length=7, default="967AA1", help_text="Color primario en formato hexadecimal (tono más oscuro).")
     secondary_color = models.CharField(max_length=7, default="AAA1C8", help_text="Color secundario en formato hexadecimal. Suele ser un color armónico al primario (tono más claro).")
     # medios
-    logo_small = CloudinaryField('image', help_text="Logo de la empresa (tamaño pequeño, versión oscura). Se usará en la navbar y en el icono de la web.")
-    logo_large = CloudinaryField('image', help_text="Logo de la empresa (tamaño grande) Se usará de fondo en la página 'nosotros'.")
+    logo_small = CloudinaryField('logo pequeño', help_text="Logo de la empresa (tamaño pequeño, versión oscura). Se usará en la navbar y en el icono de la web.")
+    logo_large = CloudinaryField('logo pequeño', help_text="Logo de la empresa (tamaño grande) Se usará de fondo en la página 'nosotros'.")
     # datos de la empresa
     country_utc_offset = models.IntegerField(default=-5, help_text="Desplazamiento UTC del país de la empresa (por ejemplo, -5 para Colombia). Se usa para el calendario de las citas")
-    location = models.CharField(max_length=255, help_text="Dirección física o ubicación de la empresa. Aparecerá en el fotter de la página")
+    location = models.CharField(blank=True, null=True, max_length=255, help_text="Dirección física o ubicación de la empresa. Aparecerá en el fotter de la página")
     email = models.EmailField(help_text="Correo electrónico de contacto de la empresa. Aparecerá en el fotter de la página")
     instagram = models.URLField(blank=True, null=True, help_text="URL del perfil de Instagram de la empresa. Aparecerá en el fotter de la página")
     facebook = models.URLField(blank=True, null=True, help_text="URL de la página de Facebook de la empresa. Aparecerá en el fotter de la página")

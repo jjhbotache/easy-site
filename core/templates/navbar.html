@@ -1,44 +1,46 @@
 <!-- components/navbar.html -->
 
-<nav class="shadow-lg h-auto flex primary-light-bg sticky top-0 z-20">
-  <div class="flex justify-between w-full">
-    <div class="flex space-x-7">
-      <div>
+<nav class="shadow-lg h-14 flex primary-light-bg sticky top-0 z-20">
+  <div class="flex justify-between w-full h-full">
+    <div class="flex space-x-7 h-full w-full px-2">
+
+      <div class="h-full flex-1">
         <!-- Logo de la empresa -->
-        <a href="/" class="link flex items-center py-4 px-2 icon">
+        <a href="/" class="link ">
           <img
             src="{{company.logo_small.url}}"
             alt="Logo"
-            class="h-8 w-8 mr-2 transition-transform duration-500 transform hover:scale-150"
+            class="h-full transition-transform duration-500 transform hover:scale-150"
           />
         </a>
       </div>
+
       <!-- Enlaces de navegación primaria -->
       <div class="hidden md:flex items-center gap-2">
         <a
           href="/"
-          class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300 text-light-color "
+          class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300 text-color "
           >Inicio</a
         >
         <a
           href="/nosotros"
-          class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300 text-light-color "
+          class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300 text-color "
           >Nosotros</a
         >
         <a
           href="/catalogo"
-          class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300 text-light-color "
+          class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300 text-color "
           >Catálogo</a
         >
         <a
           href="/contacto"
-          class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300 text-light-color "
+          class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300 text-color "
           >Contacto</a
         >
         {% if company.enable_appointments %}
         <a
           href="/calendario"
-          class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300 text-light-color "
+          class="navbar__link link py-4 px-2 bg-transparent font-semibold transition duration-300 text-color "
           >Calendario</a
         >
         {% endif %}
