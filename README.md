@@ -38,7 +38,7 @@
 - ~~Turn off/on calendar function from django panel~~
 - ~~Check responsiveness of all pages~~
 - ~~Create easy site landing page~~
-- ~~migrate db to postgres supabase ~~
+- ~~migrate db to postgres supabase~~
 - ~~fix colors~~
 - ~~solve calendar bug~~
 - ~~solve company name bug~~

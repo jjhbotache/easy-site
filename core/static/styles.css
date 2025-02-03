@@ -104,7 +104,7 @@ a:not([id]):hover {
 }
 svg{
     background: transparent;
-    color: transparent;
+    color: inherit;
 }
 .scroll-hide {
     scrollbar-width: none;
